@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import '../error/api_exception.dart';
 
 class ApiClient {
-  static const String baseUrl = 'http://172.28.6.110:8080/api';
+  static const String baseUrl = 'http://10.33.130.21:8080/api';
 
   final http.Client _client;
 
