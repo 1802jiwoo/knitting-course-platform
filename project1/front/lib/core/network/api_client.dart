@@ -12,7 +12,7 @@ class ApiClient {
 
   Future<dynamic> get(String path, {Map<String, String?>? queryParams}) async {
     final uri = _buildUri(path, queryParams);
-    final response = await _client.get(Uri.parse('$baseUrl$path'), headers: _headers());
+    final response = await _client.get(uri, headers: _headers());
     
     return _handleResponse(response);
   }

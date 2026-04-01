@@ -1,21 +1,47 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
+import '../../domain/repositories/lecture_repository.dart';
 
-class LectureNavBar extends StatelessWidget implements PreferredSizeWidget {
+class LectureNavBar extends StatefulWidget implements PreferredSizeWidget {
   final String currentRoute;
-  final TextEditingController searchController;
-  final ValueChanged<String> onSearch;
+  final ValueChanged<String>? onSearch;
+  final String searchKeyword;
 
   const LectureNavBar({
     super.key,
     required this.currentRoute,
-    required this.searchController,
-    required this.onSearch,
+    this.onSearch,
+    this.searchKeyword = '',
   });
 
   @override
   Size get preferredSize => const Size.fromHeight(64); // h-16
+
+  @override
+  State<LectureNavBar> createState() => _LectureNavBarState();
+}
+
+class _LectureNavBarState extends State<LectureNavBar> {
+  TextEditingController searchController = TextEditingController();
+  String _searchKeyword = '';
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      searchController.text = widget.searchKeyword;
+      setState(() {});
+    },);
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -55,8 +81,16 @@ class LectureNavBar extends StatelessWidget implements PreferredSizeWidget {
             Expanded(
               child: TextField(
                 controller: searchController,
-                onChanged: onSearch,
-                onSubmitted: onSearch,
+                onChanged: widget.onSearch ?? (v) {
+                  setState(() => _searchKeyword = v.trim());
+                },
+                onSubmitted: widget.onSearch ?? (v) {
+                  setState(() => _searchKeyword = v.trim());
+                  Navigator.pushReplacementNamed(
+                    context, AppRouter.lectureList,
+                    arguments: _searchKeyword,
+                  );
+                },
                 style: const TextStyle(fontSize: 14, color: AppColors.foreground),
                 decoration: InputDecoration(
                   hintText: '강의를 검색하세요...',
@@ -86,14 +120,14 @@ class LectureNavBar extends StatelessWidget implements PreferredSizeWidget {
             // Nav Links
             _NavLink(
               label: '강의',
-              isActive: currentRoute == AppRouter.lectureList,
+              isActive: widget.currentRoute == AppRouter.lectureList,
               onTap: () => Navigator.pushNamedAndRemoveUntil(
                   context, AppRouter.lectureList, (_) => false),
             ),
             const SizedBox(width: 24),
             _NavLink(
               label: '내 강의',
-              isActive: currentRoute == AppRouter.myLectures,
+              isActive: widget.currentRoute == AppRouter.myLectures,
               onTap: () => Navigator.pushNamedAndRemoveUntil(
                   context, AppRouter.myLectures, (_) => false),
             ),

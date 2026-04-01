@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loop_learn/features/lecture/presentation/widgets/shared_widgets.dart';
 import '../../../../features/lecture/domain/entities/lecture.dart';
 import '../../../../core/theme/app_colors.dart';
 
@@ -19,33 +20,6 @@ class LectureCard extends StatefulWidget {
 }
 
 class _LectureCardState extends State<LectureCard> {
-  Color get _badgeBg {
-    switch (widget.lecture.lectureType) {
-      case 'BASIC': return const Color(0xFFEFF6FF);
-      case 'PROJECT': return const Color(0xFFDCFCE7);
-      case 'PATTERN': return const Color(0xFFF3E8FF);
-      default: return AppColors.secondary;
-    }
-  }
-
-  Color get _badgeFg {
-    switch (widget.lecture.lectureType) {
-      case 'BASIC': return const Color(0xFF1D4ED8);
-      case 'PROJECT': return const Color(0xFF15803D);
-      case 'PATTERN': return const Color(0xFF7E22CE);
-      default: return AppColors.muted;
-    }
-  }
-
-  String get _badgeLabel {
-    switch (widget.lecture.lectureType) {
-      case 'BASIC': return '기초';
-      case 'PROJECT': return '작품';
-      case 'PATTERN': return '도안';
-      default: return widget.lecture.lectureType;
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -74,17 +48,7 @@ class _LectureCardState extends State<LectureCard> {
                     ),
                     Positioned(
                       top: 12, right: 12,
-                      child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                        decoration: BoxDecoration(
-                          color: _badgeBg,
-                          borderRadius: BorderRadius.circular(99),
-                        ),
-                        child: Text(
-                          _badgeLabel,
-                          style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: _badgeFg),
-                        ),
-                      ),
+                      child: LectureTypeBadge(lectureType: widget.lecture.lectureType,),
                     ),
                   ],
                 ),

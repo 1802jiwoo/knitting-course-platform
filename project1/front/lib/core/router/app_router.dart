@@ -15,7 +15,10 @@ class AppRouter {
   static Route<dynamic> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case lectureList:
-        return MaterialPageRoute(builder: (_) => const LectureListPage());
+        final args = settings.arguments.toString();
+        return MaterialPageRoute(builder: (_) => LectureListPage(
+          searchKeyword: args,
+        ));
 
       case lectureDetail:
         final lectureId = settings.arguments as int;

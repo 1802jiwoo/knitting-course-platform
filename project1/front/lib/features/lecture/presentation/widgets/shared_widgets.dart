@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../../../../core/router/app_router.dart';
+import '../../../../core/theme/app_colors.dart';
 
 // ── 공통 네비게이션 바 ────────────────────────────────────────
 
@@ -97,25 +98,45 @@ class LectureTypeBadge extends StatelessWidget {
 
   const LectureTypeBadge({super.key, required this.lectureType});
 
-  String get _label {
+  Color get _badgeBg {
     switch (lectureType) {
-      case 'BASIC':   return '기초 학습';
-      case 'PROJECT': return '작품 제작';
+      case 'BASIC': return const Color(0xFFEFF6FF);
+      case 'PROJECT': return const Color(0xFFDCFCE7);
+      case 'PATTERN': return const Color(0xFFF3E8FF);
+      default: return AppColors.secondary;
+    }
+  }
+
+  Color get _badgeFg {
+    switch (lectureType) {
+      case 'BASIC': return const Color(0xFF1D4ED8);
+      case 'PROJECT': return const Color(0xFF15803D);
+      case 'PATTERN': return const Color(0xFF7E22CE);
+      default: return AppColors.muted;
+    }
+  }
+
+  String get _badgeLabel {
+    switch (lectureType) {
+      case 'BASIC': return '기초';
+      case 'PROJECT': return '작품';
       case 'PATTERN': return '도안';
-      default:        return lectureType;
+      default: return lectureType;
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
       decoration: BoxDecoration(
-        border: Border.all(color: Colors.black26),
+        color: _badgeBg,
         borderRadius: BorderRadius.circular(99),
       ),
-      child: Text(_label,
-          style: const TextStyle(fontSize: 10, color: Colors.black54)),
+      child: Text(
+        _badgeLabel,
+        style: TextStyle(fontSize: 12, fontWeight: FontWeight.w500, color: _badgeFg),
+      ),
     );
   }
 }

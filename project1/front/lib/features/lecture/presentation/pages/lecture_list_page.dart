@@ -23,7 +23,9 @@ class _LectureTypeItem {
 }
 
 class LectureListPage extends StatefulWidget {
-  const LectureListPage({super.key});
+  const LectureListPage({super.key, this.searchKeyword});
+
+  final String? searchKeyword;
 
   @override
   State<LectureListPage> createState() => _LectureListPageState();
@@ -32,7 +34,6 @@ class LectureListPage extends StatefulWidget {
 class _LectureListPageState extends State<LectureListPage> {
   String? _selectedType;
   String _searchKeyword = '';
-  final TextEditingController _searchController = TextEditingController();
 
   List<Lecture> _lectures = [];
   bool _isLoading = true;
@@ -41,12 +42,15 @@ class _LectureListPageState extends State<LectureListPage> {
   @override
   void initState() {
     super.initState();
+    if(widget.searchKeyword != 'null') {
+      _searchKeyword = widget.searchKeyword!;
+      setState(() {});
+    }
     _fetchLectures();
   }
 
   @override
   void dispose() {
-    _searchController.dispose();
     super.dispose();
   }
 
@@ -78,7 +82,7 @@ class _LectureListPageState extends State<LectureListPage> {
       backgroundColor: AppColors.background,
       appBar: LectureNavBar(
         currentRoute: AppRouter.lectureList,
-        searchController: _searchController,
+        searchKeyword: _searchKeyword,
         onSearch: (v) {
           setState(() => _searchKeyword = v.trim());
           _fetchLectures();
@@ -165,7 +169,7 @@ class _LectureListPageState extends State<LectureListPage> {
                       return LectureCard(
                         lecture: l,
                         isEnrolled: appState.isEnrolled(l.lectureId),
-                        onTap: () => Navigator.pushNamed(
+                        onTap: () => Navigator.pushReplacementNamed(
                           context, AppRouter.lectureDetail, arguments: l.lectureId,
                         ),
                       );
