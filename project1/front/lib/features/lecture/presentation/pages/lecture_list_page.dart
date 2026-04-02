@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/state/app_state.dart';
 import '../../../../features/lecture/domain/entities/lecture.dart';
@@ -76,6 +77,7 @@ class _LectureListPageState extends State<LectureListPage> {
 
   @override
   Widget build(BuildContext context) {
+
     final appState = context.watch<AppState>();
 
     return Scaffold(
@@ -92,7 +94,7 @@ class _LectureListPageState extends State<LectureListPage> {
         slivers: [
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(32, 32, 32, 0),
+              padding: EdgeInsets.fromLTRB(context.isTablet ? 32 : 15, 32, context.isTablet ? 32 : 15, 0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -155,10 +157,10 @@ class _LectureListPageState extends State<LectureListPage> {
               const SliverFillRemaining(child: _EmptyState())
             else
               SliverPadding(
-                padding: const EdgeInsets.fromLTRB(32, 0, 32, 32),
+                padding: EdgeInsets.fromLTRB(context.isTablet ? 32 : 15, 0, context.isTablet ? 32 : 15, 32),
                 sliver: SliverGrid(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 4,
+                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: context.isTablet ? 4 : 1,
                     mainAxisSpacing: 24,
                     crossAxisSpacing: 24,
                     childAspectRatio: 0.9,
@@ -169,7 +171,7 @@ class _LectureListPageState extends State<LectureListPage> {
                       return LectureCard(
                         lecture: l,
                         isEnrolled: appState.isEnrolled(l.lectureId),
-                        onTap: () => Navigator.pushReplacementNamed(
+                        onTap: () => Navigator.pushNamed(
                           context, AppRouter.lectureDetail, arguments: l.lectureId,
                         ),
                       );

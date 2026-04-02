@@ -1,3 +1,11 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+
+# backend
+project1/backend/build/
+project1/backend/.gradle/
+
+# frontend
+project1/front/build/
+project1/front/.dart_tool/

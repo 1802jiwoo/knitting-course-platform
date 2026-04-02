@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:loop_learn/core/extensions/context_extension.dart';
 import 'package:loop_learn/core/theme/app_colors.dart';
 import 'package:loop_learn/features/lecture/presentation/widgets/detail/lecture_detail_curriculum.dart';
+import 'package:loop_learn/features/lecture/presentation/widgets/detail/lecture_detail_left.dart';
 import 'package:loop_learn/features/lecture/presentation/widgets/detail/lecture_detail_right.dart';
 import 'package:loop_learn/features/lecture/presentation/widgets/detail/lecture_detail_thumbnail.dart';
 import 'package:loop_learn/features/lecture/presentation/widgets/lecture_nav_bar.dart';
@@ -120,9 +122,7 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
       ])),
     );
 
-    final appState = context.watch<AppState>();
     final lecture = _lecture!;
-    final isEnrolled = appState.isEnrolled(widget.lectureId);
 
     // API LectureModel의 tagNames 추출
     final tagNames = (lecture as dynamic).tagNames as List<String>? ?? [];
@@ -132,111 +132,30 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
       appBar: LectureNavBar(
         currentRoute: AppRouter.lectureList,
       ),
-      body: Row(
+      body: context.isTablet ? Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(18),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 20,),
-
-                    LectureDetailThumbnail(),
-
-                    const SizedBox(height: 30),
-
-                    Row(
-                      children: [
-                        LectureTypeBadge(lectureType: lecture.lectureType),
-
-                        const SizedBox(width: 6),
-
-                        if (isEnrolled)
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
-                            decoration: BoxDecoration(
-                              border: Border.all(color: AppColors.primary),
-                              borderRadius: BorderRadius.circular(200),
-                            ),
-                            child: const Text(
-                              '수강 중',
-                              style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.primary),
-                            ),
-                          ),
-                      ],
-                    ),
-
-                    const SizedBox(height: 12),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          lecture.title,
-                          style: const TextStyle(
-                            fontSize: 30, // text-3xl 느낌
-                            fontWeight: FontWeight.bold,
-                            color: AppColors.foreground,
-                          ),
-                        ),
-
-                        const SizedBox(height: 8),
-
-                        Text(
-                          lecture.instructorName,
-                          style: const TextStyle(
-                            fontSize: 18, // text-lg 느낌
-                            color: AppColors.mutedForeground, // 흐린 색
-                          ),
-                        ),
-
-                        // const SizedBox(height: 32),
-                      ],
-                    ),
-
-                    const SizedBox(height: 30),
-
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '강의 소개',
-                          style: TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w600,
-                            color: AppColors.foreground,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-
-                        Text(
-                          lecture.description,
-                          style: const TextStyle(
-                            fontSize: 13,
-                            height: 1.6,
-                            color: AppColors.foreground,
-                          ),
-                        ),
-
-                        const SizedBox(height: 32),
-
-                        LectureDetailCurriculum(parts: _parts),
-                      ],
-                    ),
-
-                    const VerticalDivider(width: 1),
-                  ],
-                ),
-              ),
-            ),
+          LectureDetailLeft(
+            lecture: _lecture!, lectureId: widget.lectureId, parts: _parts,
           ),
           LectureDetailRight(
             lecture: _lecture!, lectureId: widget.lectureId, parts: _parts,
           ),
         ],
+      ) : SingleChildScrollView(
+        child: IntrinsicHeight(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              LectureDetailLeft(
+                lecture: _lecture!, lectureId: widget.lectureId, parts: _parts,
+              ),
+              LectureDetailRight(
+                lecture: _lecture!, lectureId: widget.lectureId, parts: _parts,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

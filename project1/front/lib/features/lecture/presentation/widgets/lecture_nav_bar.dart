@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
 import '../../domain/repositories/lecture_repository.dart';
@@ -46,6 +47,7 @@ class _LectureNavBarState extends State<LectureNavBar> {
   @override
   Widget build(BuildContext context) {
     return AppBar(
+      automaticallyImplyLeading: false,
       backgroundColor: AppColors.card,
       elevation: 0,
       titleSpacing: 0,
@@ -54,7 +56,7 @@ class _LectureNavBarState extends State<LectureNavBar> {
         child: Container(height: 1, color: AppColors.border),
       ),
       title: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 32),
+        padding: EdgeInsets.symmetric(horizontal: context.isTablet ? 32 : 15),
         child: Row(
           children: [
             // Logo
@@ -71,11 +73,11 @@ class _LectureNavBarState extends State<LectureNavBar> {
               ),
             ),
             const SizedBox(width: 8),
-            const Text(
+            if(context.isTablet) const Text(
               'LoopLearn',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600, color: AppColors.foreground),
             ),
-            const SizedBox(width: 32),
+            SizedBox(width: context.isTablet ? 32 : 15),
 
             // Search
             Expanded(
@@ -93,7 +95,7 @@ class _LectureNavBarState extends State<LectureNavBar> {
                 },
                 style: const TextStyle(fontSize: 14, color: AppColors.foreground),
                 decoration: InputDecoration(
-                  hintText: '강의를 검색하세요...',
+                  hintText: '강의를 검색하세요.',
                   hintStyle: const TextStyle(fontSize: 14, color: AppColors.mutedForeground),
                   prefixIcon: const Icon(Icons.search, size: 20, color: AppColors.mutedForeground),
                   isDense: true,
@@ -115,7 +117,7 @@ class _LectureNavBarState extends State<LectureNavBar> {
                 ),
               ),
             ),
-            const SizedBox(width: 32),
+            SizedBox(width: context.isTablet ? 32 : 15),
 
             // Nav Links
             _NavLink(
