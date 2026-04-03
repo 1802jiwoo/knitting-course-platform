@@ -23,12 +23,12 @@ class PatternPanel extends StatelessWidget {
   final ValueChanged<int> onCounterChange;
   // TSX의 knittingSymbols에 대응하는 기호 목록
   static const List<(String abbr, String name)> _symbols = [
-    ('sc',    '짧은뜨기'),
-    ('inc',   '늘림'),
-    ('dec',   '줄임'),
-    ('ch',    '사슬뜨기'),
+    ('sc', '짧은뜨기'),
+    ('inc', '늘림'),
+    ('dec', '줄임'),
+    ('ch', '사슬뜨기'),
     ('sl st', '빼뜨기'),
-    ('dc',    '긴뜨기'),
+    ('dc', '긴뜨기'),
   ];
 
   @override
@@ -67,52 +67,57 @@ class PatternPanel extends StatelessWidget {
             ...patterns.map((p) {
               final isHighlighted = highlightedPattern?.patternId == p.patternId;
               return Container(
-                margin: const EdgeInsets.only(bottom: 6),
+                margin: const EdgeInsets.only(bottom: 8),
+                padding: const EdgeInsets.all(12), // p-3
                 decoration: BoxDecoration(
-                  color: Colors.white,
-                  border: Border.all(
-                    color: isHighlighted
-                        ? AppColors.primary.withOpacity(0.6)
-                        : const Color(0xFFE5E7EB),
-                  ),
-                  borderRadius: BorderRadius.circular(8),
+                  color: Colors.white, // bg-card
+                  borderRadius: BorderRadius.circular(12), // rounded 느낌 살짝 더
+                  border: Border.all(color: const Color(0xFFE5E7EB)),
                 ),
-                child: Row(children: [
-                  // 행 번호 뱃지 (TSX: w-8 h-8 rounded-lg bg-primary/10)
-                  Container(
-                    width: 36,
-                    padding: const EdgeInsets.symmetric(vertical: 10),
-                    decoration: BoxDecoration(
-                      color: AppColors.primary.withOpacity(0.1),
-                      borderRadius: const BorderRadius.horizontal(
-                          left: Radius.circular(7)),
-                    ),
-                    child: Center(
-                      child: Text('${p.rowNum}',
-                          style: TextStyle(
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    // 번호 영역 (w-12 flex-shrink-0 느낌)
+                    SizedBox(
+                      width: 48,
+                      child: Center(
+                        child: Container(
+                          width: 32, // w-8
+                          height: 32, // h-8
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.1), // bg-primary/10
+                            borderRadius: BorderRadius.circular(10), // rounded-lg
+                          ),
+                          alignment: Alignment.center,
+                          child: Text(
+                            '${p.rowNum}',
+                            style: TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
-                              color: AppColors.primary)),
+                              color: AppColors.primary,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                  // 도안 내용
-                  Expanded(child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 8),
-                    child: Text(
-                      p.patternText,
-                      style: TextStyle(
-                          fontSize: 12,
+
+                    const SizedBox(width: 12), // gap-3
+
+                    // 텍스트 영역
+                    Expanded(
+                      child: Text(
+                        p.patternText,
+                        style: TextStyle(
+                          fontSize: 14, // text-sm
                           fontFamily: 'monospace',
-                          fontWeight: isHighlighted
-                              ? FontWeight.w600
-                              : FontWeight.w400,
-                          color: isHighlighted
-                              ? Colors.black87
-                              : Colors.black54),
+                          height: 1.5, // leading-relaxed
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black87,
+                        ),
+                      ),
                     ),
-                  )),
-                ]),
+                  ],
+                ),
               );
             }),
           ],
