@@ -167,6 +167,7 @@ class _MyLectureCardState extends State<MyLectureCard> {
                     context, AppRouter.lectureWatch, arguments: {
                       'lectureId': widget.lecture.lectureId,
                       'partId': (widget.completedParts + 1).clamp(0, widget.totalParts),
+                      'lectureTitle': widget.lecture.title,
                     },
                   );
                 },

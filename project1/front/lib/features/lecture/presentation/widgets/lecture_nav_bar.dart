@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:http/http.dart';
-import 'package:provider/provider.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/theme/app_colors.dart';
-import '../../domain/repositories/lecture_repository.dart';
 
 class LectureNavBar extends StatefulWidget implements PreferredSizeWidget {
   final String currentRoute;

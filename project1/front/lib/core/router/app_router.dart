@@ -27,11 +27,12 @@ class AppRouter {
         );
 
       case lectureWatch:
-        final args = settings.arguments as Map<String, int>;
+        final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (_) => LectureWatchPage(
             lectureId: args['lectureId']!,
             partId: args['partId']!,
+            lectureTitle: args['lectureTitle'].toString(),
           ),
         );
 
@@ -42,7 +43,7 @@ class AppRouter {
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
           builder: (_) => QuestionDetailPage(
-            questionId: args['questionId'] as int,
+            lectureTitle: args['lectureTitle'].toString(),
             lectureId: args['lectureId'] as int,
           ),
         );

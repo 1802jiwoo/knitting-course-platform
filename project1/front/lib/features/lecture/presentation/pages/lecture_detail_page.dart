@@ -59,11 +59,11 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
     });
     try {
       final lectureRepo = context.read<LectureRepository>();
-      final questionRepo = context.read<QuestionRepository>();
+      // final questionRepo = context.read<QuestionRepository>();
       final results = await Future.wait([
         lectureRepo.getLectureDetail(widget.lectureId),
         lectureRepo.getLectureParts(widget.lectureId),
-        questionRepo.getQuestions(widget.lectureId),
+        // questionRepo.getQuestions(widget.lectureId),
       ]);
       if (mounted) {
         setState(() {

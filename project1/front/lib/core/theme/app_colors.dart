@@ -4,35 +4,35 @@ class AppColors {
   AppColors._();
 
   // Base
-  static const background        = Color(0xFFFFFEF7);
-  static const foreground        = Color(0xFF3D3226);
+  static const background = Color(0xFFFFFEF7);
+  static const foreground = Color(0xFF3D3226);
 
   // Card
-  static const card              = Color(0xFFFFFFFF);
-  static const cardForeground    = Color(0xFF3D3226);
+  static const card = Color(0xFFFFFFFF);
+  static const cardForeground = Color(0xFF3D3226);
 
   // Primary
-  static const primary           = Color(0xFF8B6F47);
+  static const primary = Color(0xFF8B6F47);
   static const primaryForeground = Color(0xFFFFFEF7);
 
   // Secondary
-  static const secondary           = Color(0xFFF5F1E8);
+  static const secondary = Color(0xFFF5F1E8);
   static const secondaryForeground = Color(0xFF3D3226);
 
   // Muted
-  static const muted           = Color(0xFFE8E3D6);
+  static const muted = Color(0xFFE8E3D6);
   static const mutedForeground = Color(0xFF6B5D4F);
 
   // Accent
-  static const accent           = Color(0xFFD4A574);
+  static const accent = Color(0xFFD4A574);
   static const accentForeground = Color(0xFF3D3226);
 
   // Destructive
-  static const destructive           = Color(0xFFD4183D);
+  static const destructive = Color(0xFFD4183D);
   static const destructiveForeground = Color(0xFFFFFFFF);
 
   // Border / Input
-  static const border          = Color(0x268B6F47);
+  static const border = Color(0x268B6F47);
   static const inputBackground = Color(0xFFF5F1E8);
 
   static const ring = Color(0xFF8B6F47);

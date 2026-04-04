@@ -20,11 +20,13 @@ import '../widgets/watch/part_list_panel.dart';
 class LectureWatchPage extends StatefulWidget {
   final int lectureId;
   final int partId;
+  final String lectureTitle;
 
   const LectureWatchPage({
     super.key,
     required this.lectureId,
     required this.partId,
+    required this.lectureTitle,
   });
 
   @override
@@ -204,87 +206,90 @@ class _LectureWatchPageState extends State<LectureWatchPage>
                   isCompleted: completedParts.contains(_currentPartId),
                 ),
 
-                rightPanel(completedParts),
+                Expanded(child: rightPanel(completedParts)),
               ],
             ),
     );
   }
 
-  Widget rightPanel(Set<int> completedParts) => Expanded(
-    child: Container(
-      width: context.isTablet ? 280 : double.infinity,
-      decoration: const BoxDecoration(
-        color: Colors.white,
-        border: Border(left: BorderSide(color: Color(0xFFE5E7EB))),
-      ),
-      child: Column(
-        children: [
-          // 탭 헤더 (TSX: TabsList)
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
-            ),
-            child: TabBar(
-              controller: _tabController,
-              indicator: BoxDecoration(color: AppColors.primary),
-              indicatorSize: TabBarIndicatorSize.tab,
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.black54,
-              labelStyle: const TextStyle(
-                fontSize: 13,
-                fontWeight: FontWeight.w500,
-              ),
-              unselectedLabelStyle: const TextStyle(fontSize: 13),
-              tabs: const [
-                Tab(text: '강의 목록'),
-                Tab(text: '도안'),
-              ],
-            ),
+  Widget rightPanel(Set<int> completedParts) => Container(
+    width: context.isTablet ? 280 : double.infinity,
+    decoration: const BoxDecoration(
+      color: Colors.white,
+      border: Border(left: BorderSide(color: Color(0xFFE5E7EB))),
+    ),
+    child: Column(
+      children: [
+        // 탭 헤더 (TSX: TabsList)
+        Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            border: Border(bottom: BorderSide(color: Color(0xFFE5E7EB))),
           ),
+          child: TabBar(
+            controller: _tabController,
+            indicator: BoxDecoration(color: AppColors.primary),
+            indicatorSize: TabBarIndicatorSize.tab,
+            labelColor: Colors.white,
+            unselectedLabelColor: Colors.black54,
+            labelStyle: const TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w500,
+            ),
+            unselectedLabelStyle: const TextStyle(fontSize: 13),
+            tabs: const [
+              Tab(text: '강의 목록'),
+              Tab(text: '도안'),
+            ],
+          ),
+        ),
 
-          // 탭 콘텐츠
-          Expanded(
-            child: TabBarView(
-              controller: _tabController,
-              children: [
-                // ── 강의 목록 탭 ──
-                PartListPanel(
-                  parts: _parts,
-                  currentPartId: _currentPartId,
-                  completedParts: completedParts,
-                  onPartSelected: _selectPart,
-                  onQnaTap: () {
-                    // TODO: Q&A 페이지로 이동
-                  },
-                ),
+        // 탭 콘텐츠
+        Expanded(
+          child: TabBarView(
+            controller: _tabController,
+            children: [
+              // ── 강의 목록 탭 ──
+              PartListPanel(
+                parts: _parts,
+                currentPartId: _currentPartId,
+                completedParts: completedParts,
+                onPartSelected: _selectPart,
+                onQnaTap: () {
+                  Navigator.pushNamed(
+                    context, AppRouter.questionDetail, arguments: {
+                      'lectureTitle': widget.lectureTitle,
+                      'lectureId': widget.lectureId,
+                    },
+                  );
+                },
+              ),
 
-                // ── 도안 탭 ──
-                _hasPattern
-                    ? PatternPanel(
-                        partPatterns: _partPatterns,
-                        lecturePatterns: _lecturePatterns,
-                        highlightedPattern: _highlightedPattern,
-                        rowCounter: _rowCounter,
-                        onCounterChange: (d) => setState(
-                          () => _rowCounter = (_rowCounter + d).clamp(0, 9999),
-                        ),
-                      )
-                    : const Center(
-                        child: Padding(
-                          padding: EdgeInsets.all(16),
-                          child: Text(
-                            '이 강의에는 도안이 제공되지 않습니다.',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(fontSize: 13, color: Colors.black45),
-                          ),
+              // ── 도안 탭 ──
+              _hasPattern
+                  ? PatternPanel(
+                      partPatterns: _partPatterns,
+                      lecturePatterns: _lecturePatterns,
+                      highlightedPattern: _highlightedPattern,
+                      rowCounter: _rowCounter,
+                      onCounterChange: (d) => setState(
+                        () => _rowCounter = (_rowCounter + d).clamp(0, 9999),
+                      ),
+                    )
+                  : const Center(
+                      child: Padding(
+                        padding: EdgeInsets.all(16),
+                        child: Text(
+                          '이 강의에는 도안이 제공되지 않습니다.',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontSize: 13, color: Colors.black45),
                         ),
                       ),
-              ],
-            ),
+                    ),
+            ],
           ),
-        ],
-      ),
+        ),
+      ],
     ),
   );
 
