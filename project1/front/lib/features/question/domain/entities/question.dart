@@ -1,6 +1,6 @@
 class Question {
   final int questionId;
-  final int userId;
+  final String nickname;
   final int lectureId;
   final String title;
   final String content;
@@ -9,7 +9,7 @@ class Question {
 
   const Question({
     required this.questionId,
-    required this.userId,
+    required this.nickname,
     required this.lectureId,
     required this.title,
     required this.content,

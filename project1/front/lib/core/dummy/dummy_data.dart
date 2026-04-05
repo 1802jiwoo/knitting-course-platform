@@ -115,9 +115,9 @@ List<LecturePattern> getLecturePatternsForLecture(int lectureId) =>
 
 // ── 질문 ──────────────────────────────────────────────────────
 final List<Question> dummyQuestions = [
-  Question(questionId: 1, userId: 1, lectureId: 1, title: '코 잡기 질문', content: '코가 자꾸 풀려요. 처음에 너무 느슨하게 잡은 걸까요? 어떻게 해야 단단하게 잡을 수 있나요?', imageUrl: null, createdAt: DateTime(2026, 3, 10)),
-  Question(questionId: 2, userId: 1, lectureId: 1, title: '기본 뜨기가 잘 안돼요', content: '영상을 따라 해봤는데 모양이 이상하게 나와요. 코가 뒤틀리는 것 같기도 하고, 어디서부터 잘못된 건지 모르겠어요.', imageUrl: null, createdAt: DateTime(2026, 3, 9)),
-  Question(questionId: 3, userId: 1, lectureId: 2, title: '인형 머리 모양이 이상해요', content: '머리가 너무 납작하게 나와요. 솜을 충분히 넣었는데도 동그랗게 안 되는 이유가 있을까요?', imageUrl: null, createdAt: DateTime(2026, 3, 11)),
+  // Question(questionId: 1, userId: 1, lectureId: 1, title: '코 잡기 질문', content: '코가 자꾸 풀려요. 처음에 너무 느슨하게 잡은 걸까요? 어떻게 해야 단단하게 잡을 수 있나요?', imageUrl: null, createdAt: DateTime(2026, 3, 10)),
+  // Question(questionId: 2, userId: 1, lectureId: 1, title: '기본 뜨기가 잘 안돼요', content: '영상을 따라 해봤는데 모양이 이상하게 나와요. 코가 뒤틀리는 것 같기도 하고, 어디서부터 잘못된 건지 모르겠어요.', imageUrl: null, createdAt: DateTime(2026, 3, 9)),
+  // Question(questionId: 3, userId: 1, lectureId: 2, title: '인형 머리 모양이 이상해요', content: '머리가 너무 납작하게 나와요. 솜을 충분히 넣었는데도 동그랗게 안 되는 이유가 있을까요?', imageUrl: null, createdAt: DateTime(2026, 3, 11)),
 ];
 
 List<Question> getQuestionsForLecture(int lectureId) {

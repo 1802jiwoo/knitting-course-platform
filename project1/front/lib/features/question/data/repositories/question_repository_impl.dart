@@ -13,6 +13,7 @@ class QuestionRepositoryImpl implements QuestionRepository {
   Future<List<Question>> getQuestions(int lectureId) async {
     final data =
         await _api.get('/lectures/$lectureId/questions') as List<dynamic>;
+
     return data
         .map(
           (e) => QuestionModel.fromListJson(

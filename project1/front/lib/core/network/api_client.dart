@@ -6,6 +6,7 @@ import '../error/api_exception.dart';
 class ApiClient {
   // static const String baseUrl = 'http://10.33.130.21:8080/api';
   static const String baseUrl = 'http://192.168.200.161:8080/api';
+  // static const String baseUrl = 'http://172.28.6.110:8080/api';
 
   final http.Client _client;
 
@@ -13,6 +14,7 @@ class ApiClient {
 
   Future<dynamic> get(String path, {Map<String, String?>? queryParams}) async {
     final uri = _buildUri(path, queryParams);
+
     final response = await _client.get(uri, headers: _headers());
     
     return _handleResponse(response);

@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 public record QuestionDetailResponse(
     Long questionId,
     Long lectureId,
+    String nickname,
     String title,
     String content,
     String imageUrl,
@@ -16,6 +17,7 @@ public record QuestionDetailResponse(
         return new QuestionDetailResponse(
             q.getQuestionId(),
             q.getLecture().getLectureId(),
+            q.getUser().getNickname(),
             q.getTitle(),
             q.getContent(),
             q.getImageUrl(),

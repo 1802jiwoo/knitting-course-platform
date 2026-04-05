@@ -9,16 +9,16 @@ class AnswerModel extends Answer {
   });
 
   factory AnswerModel.fromJson(Map<String, dynamic> json) => AnswerModel(
-    answerId: json['answer_id'] as int,
+    answerId: json['answerId'] as int,
     content: json['content'] as String,
     nickname: json['nickname'] as String,
-    createdAt: DateTime.parse(json['created_at'] as String),
+    createdAt: DateTime.parse(json['createdAt'] as String),
   );
 
   Map<String, dynamic> toJson() => {
-    'answer_id': answerId,
+    'answerId': answerId,
     'content': content,
     'nickname': nickname,
-    'created_at': createdAt.toIso8601String(),
+    'createdAt': createdAt.toIso8601String(),
   };
 }

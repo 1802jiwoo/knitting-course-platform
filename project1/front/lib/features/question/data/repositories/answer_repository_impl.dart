@@ -12,13 +12,11 @@ class AnswerRepositoryImpl implements AnswerRepository {
   @override
   Future<Answer?> getAnswer(int questionId) async {
     try {
-      final response = await api.get('/api/questions/$questionId/answer');
-      if (response.statusCode == 200) {
-        final json = jsonDecode(utf8.decode(response.bodyBytes));
-        return AnswerModel.fromJson(json);
-      }
-      return null;
+      final data = await api.get('/questions/$questionId/answer') as Map<String, dynamic>;
+      print(data);
+      return AnswerModel.fromJson(data);
     } catch (e) {
+      print(e);
       return null;
     }
   }

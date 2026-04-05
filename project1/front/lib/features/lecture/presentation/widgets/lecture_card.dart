@@ -20,6 +20,16 @@ class LectureCard extends StatefulWidget {
 }
 
 class _LectureCardState extends State<LectureCard> {
+
+  String _getImage() {
+    switch (widget.lecture.lectureType) {
+      case 'BASIC': return 'https://i.pinimg.com/736x/0d/eb/d8/0debd8a1fdfb48ae02d597c13d5d5e7d.jpg';
+      case 'PROJECT': return 'https://i.pinimg.com/736x/93/10/e4/9310e46a0d10bb95d76cb4866c5742d6.jpg';
+      case 'PATTERN': return 'https://i.pinimg.com/736x/1e/41/cf/1e41cfebfc77d2e2372a270ebcd3844a.jpg';
+      default: return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -37,20 +47,9 @@ class _LectureCardState extends State<LectureCard> {
             children: [
               AspectRatio(
                 aspectRatio: 16 / 9,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    Container(
-                      color: AppColors.secondary,
-                      child: const Center(
-                        child: Icon(Icons.play_circle_outline, size: 36, color: Color(0xFFD1D5DB)),
-                      ),
-                    ),
-                    Positioned(
-                      top: 12, right: 12,
-                      child: LectureTypeBadge(lectureType: widget.lecture.lectureType,),
-                    ),
-                  ],
+                child: Image.network(
+                  _getImage(),
+                  fit: BoxFit.cover,
                 ),
               ),
 

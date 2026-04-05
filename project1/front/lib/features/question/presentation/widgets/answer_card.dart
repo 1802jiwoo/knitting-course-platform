@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:loop_learn/core/theme/app_colors.dart';
 
 import '../../domain/entities/answer.dart';
 
@@ -11,9 +12,9 @@ class AnswerCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.grey.shade50,
+        color: AppColors.secondary,
         borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: Colors.black.withOpacity(0.07)),
+        border: Border.all(color: AppColors.muted),
       ),
       padding: const EdgeInsets.all(14),
       child: Column(
@@ -26,8 +27,8 @@ class AnswerCard extends StatelessWidget {
               Container(
                 width: 32,
                 height: 32,
-                decoration: const BoxDecoration(
-                  color: Colors.black87,
+                decoration: BoxDecoration(
+                  color: AppColors.primary,
                   shape: BoxShape.circle,
                 ),
                 child: Center(
@@ -51,18 +52,18 @@ class AnswerCard extends StatelessWidget {
                       children: [
                         Text(
                           answer.nickname,
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
-                            color: Colors.black87,
+                            color: AppColors.foreground,
                           ),
                         ),
                         const SizedBox(width: 8),
                         Text(
                           answer.createdAt.toString().substring(0, 10),
-                          style: const TextStyle(
+                          style: TextStyle(
                             fontSize: 11,
-                            color: Colors.black45,
+                            color: AppColors.mutedForeground,
                           ),
                         ),
                       ],
@@ -79,7 +80,7 @@ class AnswerCard extends StatelessWidget {
               answer.content,
               style: const TextStyle(
                 fontSize: 13,
-                color: Colors.black87,
+                color: AppColors.foreground,
                 height: 1.7,
               ),
             ),

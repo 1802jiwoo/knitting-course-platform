@@ -33,8 +33,6 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
   // API 상태
   Lecture? _lecture;
   List<LecturePart> _parts = [];
-
-  // List<Question> _questions = [];
   List<Tag> _tags = [];
   bool _isLoading = true;
   String? _error;
@@ -59,17 +57,14 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
     });
     try {
       final lectureRepo = context.read<LectureRepository>();
-      // final questionRepo = context.read<QuestionRepository>();
       final results = await Future.wait([
         lectureRepo.getLectureDetail(widget.lectureId),
         lectureRepo.getLectureParts(widget.lectureId),
-        // questionRepo.getQuestions(widget.lectureId),
       ]);
       if (mounted) {
         setState(() {
           _lecture = results[0] as Lecture;
           _parts = results[1] as List<LecturePart>;
-          // _questions = results[2] as List<Question>;
           _isLoading = false;
         });
       }
@@ -80,34 +75,6 @@ class _LectureDetailPageState extends State<LectureDetailPage> {
       });
     }
   }
-
-  // Future<void> _submitQuestion(BuildContext context, AppState appState) async {
-  //   final title = _titleCtrl.text.trim();
-  //   final content = _contentCtrl.text.trim();
-  //   if (title.isEmpty || content.isEmpty) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('필수 항목을 입력해 주세요')));
-  //     return;
-  //   }
-  //   try {
-  //     final repo = context.read<QuestionRepository>();
-  //     await repo.postQuestion(
-  //       lectureId: widget.lectureId,
-  //       title: title,
-  //       content: content,
-  //     );
-  //     _titleCtrl.clear();
-  //     _contentCtrl.clear();
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('질문이 등록되었습니다')));
-  //     // 질문 목록 새로고침
-  //     final newQs = await repo.getQuestions(widget.lectureId);
-  //     if (mounted) setState(() => _questions = newQs);
-  //   } catch (e) {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       const SnackBar(content: Text('질문 등록에 실패했습니다.')));
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {

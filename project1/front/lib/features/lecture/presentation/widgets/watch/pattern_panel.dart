@@ -1,26 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:loop_learn/features/lecture/presentation/widgets/watch/symbol_card.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../../core/theme/app_colors.dart';
 import '../../../domain/entities/lecture_pattern.dart';
 import '../../../domain/entities/part_pattern.dart';
 import '../../../domain/entities/pattern_row.dart';
 
-class PatternPanel extends StatelessWidget {
+class PatternPanel extends StatefulWidget {
   const PatternPanel({
     super.key,
+    required this.lectureId,
+    required this.partId,
     required this.partPatterns,
     required this.lecturePatterns,
     required this.highlightedPattern,
-    required this.rowCounter,
-    required this.onCounterChange,
   });
 
+  final int lectureId;
+  final int partId;
   final List<PartPattern> partPatterns;
   final List<LecturePattern> lecturePatterns;
   final PartPattern? highlightedPattern;
-  final int rowCounter;
-  final ValueChanged<int> onCounterChange;
+
+  @override
+  State<PatternPanel> createState() => _PatternPanelState();
+}
+
+class _PatternPanelState extends State<PatternPanel> {
   // TSX의 knittingSymbols에 대응하는 기호 목록
   static const List<(String abbr, String name)> _symbols = [
     ('sc', '짧은뜨기'),
@@ -31,10 +38,51 @@ class PatternPanel extends StatelessWidget {
     ('dc', '긴뜨기'),
   ];
 
+  int _rowCounter = 0;
+  SharedPreferences? _prefs;
+
+  /// SharedPreferences 저장 키 (강의 ID + 파트 ID 조합)
+  String get _counterKey =>
+      'row_counter_${widget.lectureId}_${widget.partId}';
+
+  @override
+  void initState() {
+    super.initState();
+    _loadCounter();
+  }
+
+  @override
+  void didUpdateWidget(PatternPanel oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    // 파트가 바뀌면 해당 파트의 카운터를 다시 로드
+    if (oldWidget.partId != widget.partId ||
+        oldWidget.lectureId != widget.lectureId) {
+      _loadCounter();
+    }
+  }
+
+  Future<void> _loadCounter() async {
+    _prefs ??= await SharedPreferences.getInstance();
+    if (mounted) {
+      setState(() {
+        _rowCounter = _prefs!.getInt(_counterKey) ?? 0;
+      });
+    }
+  }
+
+  Future<void> _updateCounter(int delta) async {
+    final newVal = (_rowCounter + delta).clamp(0, 9999);
+    setState(() => _rowCounter = newVal);
+    _prefs ??= await SharedPreferences.getInstance();
+    await _prefs!.setInt(_counterKey, newVal);
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<PatternRow> patterns =
-    partPatterns.isNotEmpty ? partPatterns : lecturePatterns;
+    widget.partPatterns.isNotEmpty
+        ? widget.partPatterns
+        : widget.lecturePatterns;
 
     return Column(children: [
       // 스크롤 영역
@@ -53,10 +101,12 @@ class PatternPanel extends StatelessWidget {
               crossAxisSpacing: 6,
               mainAxisSpacing: 6,
               childAspectRatio: 2.4,
-              children: _symbols.map((e) => SymbolCard(
+              children: _symbols
+                  .map((e) => SymbolCard(
                 abbreviation: e.$1,
                 name: e.$2,
-              )).toList(),
+              ))
+                  .toList(),
             ),
 
             const SizedBox(height: 20),
@@ -65,28 +115,29 @@ class PatternPanel extends StatelessWidget {
                 style: TextStyle(fontSize: 13, fontWeight: FontWeight.w600)),
             const SizedBox(height: 10),
             ...patterns.map((p) {
-              final isHighlighted = highlightedPattern?.patternId == p.patternId;
+              final isHighlighted =
+                  widget.highlightedPattern?.patternId == p.patternId;
               return Container(
                 margin: const EdgeInsets.only(bottom: 8),
-                padding: const EdgeInsets.all(12), // p-3
+                padding: const EdgeInsets.all(12),
                 decoration: BoxDecoration(
-                  color: Colors.white, // bg-card
-                  borderRadius: BorderRadius.circular(12), // rounded 느낌 살짝 더
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
                   border: Border.all(color: const Color(0xFFE5E7EB)),
                 ),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 번호 영역 (w-12 flex-shrink-0 느낌)
+                    // 번호 영역
                     SizedBox(
                       width: 48,
                       child: Center(
                         child: Container(
-                          width: 32, // w-8
-                          height: 32, // h-8
+                          width: 32,
+                          height: 32,
                           decoration: BoxDecoration(
-                            color: AppColors.primary.withOpacity(0.1), // bg-primary/10
-                            borderRadius: BorderRadius.circular(10), // rounded-lg
+                            color: AppColors.primary.withOpacity(0.1),
+                            borderRadius: BorderRadius.circular(10),
                           ),
                           alignment: Alignment.center,
                           child: Text(
@@ -101,16 +152,16 @@ class PatternPanel extends StatelessWidget {
                       ),
                     ),
 
-                    const SizedBox(width: 12), // gap-3
+                    const SizedBox(width: 12),
 
                     // 텍스트 영역
                     Expanded(
                       child: Text(
                         p.patternText,
-                        style: TextStyle(
-                          fontSize: 14, // text-sm
+                        style: const TextStyle(
+                          fontSize: 14,
                           fontFamily: 'monospace',
-                          height: 1.5, // leading-relaxed
+                          height: 1.5,
                           fontWeight: FontWeight.w400,
                           color: Colors.black87,
                         ),
@@ -136,30 +187,29 @@ class PatternPanel extends StatelessWidget {
               style: TextStyle(fontSize: 11, color: Colors.black45)),
           const SizedBox(height: 8),
           Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            counterBtn(
-              Icons.remove, () => onCounterChange(-1),
-            ),
+            _counterBtn(Icons.remove, () => _updateCounter(-1)),
             SizedBox(
               width: 72,
               child: Center(
-                child: Text('${rowCounter}단',
-                    style: const TextStyle(
-                        fontSize: 18, fontWeight: FontWeight.w700)),
+                child: Text(
+                  '$_rowCounter단',
+                  style: const TextStyle(
+                      fontSize: 18, fontWeight: FontWeight.w700),
+                ),
               ),
             ),
-            counterBtn(
-              Icons.add, () => onCounterChange(1),
-            ),
+            _counterBtn(Icons.add, () => _updateCounter(1)),
           ]),
         ]),
       ),
     ]);
   }
 
-  Widget counterBtn(IconData icon, VoidCallback onTap) => GestureDetector(
+  Widget _counterBtn(IconData icon, VoidCallback onTap) => GestureDetector(
     onTap: onTap,
     child: Container(
-      width: 32, height: 32,
+      width: 32,
+      height: 32,
       decoration: BoxDecoration(
         border: Border.all(color: const Color(0xFFD1D5DB)),
         borderRadius: BorderRadius.circular(8),

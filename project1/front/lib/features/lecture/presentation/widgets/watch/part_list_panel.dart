@@ -85,24 +85,14 @@ class PartListPanel extends StatelessWidget {
                       const SizedBox(width: 10),
                       // 제목 + 시간
                       Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              p.title,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontSize: 13,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            const SizedBox(height: 2),
-                            // Text(
-                            //   _formatDuration(p.durationSec),
-                            //   style: const TextStyle(fontSize: 11, color: Colors.black45),
-                            // ),
-                          ],
+                        child: Text(
+                          p.title,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: const TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                          ),
                         ),
                       ),
                       // 현재 파트 화살표 (TSX: ChevronRight)

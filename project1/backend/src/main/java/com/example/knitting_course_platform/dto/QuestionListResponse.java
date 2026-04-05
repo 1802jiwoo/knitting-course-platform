@@ -7,12 +7,14 @@ import java.time.LocalDateTime;
 public record QuestionListResponse(
     Long questionId,
     String title,
+    String nickname,
     LocalDateTime createdAt
 ) {
     public static QuestionListResponse from(Question q) {
         return new QuestionListResponse(
             q.getQuestionId(),
             q.getTitle(),
+            q.getUser().getNickname(),
             q.getCreatedAt()
         );
     }

@@ -9,21 +9,21 @@ import '../widgets/question_card.dart';
 import '../widgets/question_detail_dialog.dart';
 import '../widgets/write_question_dialog.dart';
 
-class QuestionDetailPage extends StatefulWidget {
+class QuestionPage extends StatefulWidget {
   final int lectureId;
   final String lectureTitle;
 
-  const QuestionDetailPage({
+  const QuestionPage({
     super.key,
     required this.lectureId,
     required this.lectureTitle,
   });
 
   @override
-  State<QuestionDetailPage> createState() => _QuestionDetailPageState();
+  State<QuestionPage> createState() => QuestionPageState();
 }
 
-class _QuestionDetailPageState extends State<QuestionDetailPage> {
+class QuestionPageState extends State<QuestionPage> {
   List<Question> _questions = [];
   bool _isLoading = true;
   String? _error;
@@ -56,16 +56,6 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
         });
       }
     }
-  }
-
-  void _openDetail(Question question) {
-    showDialog(
-      context: context,
-      builder: (_) => QuestionDetailDialog(
-        question: question,
-        lectureId: widget.lectureId,
-      ),
-    );
   }
 
   void _openWriteDialog() {
@@ -236,7 +226,6 @@ class _QuestionDetailPageState extends State<QuestionDetailPage> {
       separatorBuilder: (_, _) => const SizedBox(height: 10),
       itemBuilder: (_, i) => QuestionCard(
         question: _questions[i],
-        onTap: () => _openDetail(_questions[i]),
       ),
     );
   }

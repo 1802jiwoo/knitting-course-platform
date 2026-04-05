@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:loop_learn/core/extensions/context_extension.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/router/app_router.dart';
 import '../../../../../core/state/app_state.dart';
 import '../../../../../core/theme/app_colors.dart';
+import '../../../../../core/widgets/confirm_dialog.dart';
 import '../../../domain/entities/lecture.dart';
 import '../../../domain/entities/lecture_part.dart';
 
@@ -21,37 +23,18 @@ class LectureDetailRight extends StatefulWidget {
 class _LectureDetailRightState extends State<LectureDetailRight> {
 
   void _showEnrollDialog(BuildContext context, AppState appState) {
-    showDialog(
+    ConfirmDialog.show(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('수강 신청', style: TextStyle(fontSize: 15)),
-        content: Text.rich(TextSpan(children: [
-          TextSpan(text: widget.lecture.title, style: const TextStyle(fontWeight: FontWeight.w600)),
-          const TextSpan(text: ' 강의를 수강 신청하시겠습니까?'),
-        ])),
-        actions: [
-          TextButton(onPressed: () => Navigator.pop(context), child: const Text('아니오')),
-          TextButton(
-            onPressed: () {
-              appState.enroll(widget.lectureId);
-              Navigator.pop(context);
-            },
-            child: const Text('확인', style: TextStyle(fontWeight: FontWeight.w600)),
-          ),
-        ],
-      ),
+      title: '수강 신청',
+      message: '${widget.lecture.title} 강의를 수강 신청하시겠습니까?',
+      confirmText: '확인',
+      onConfirm: () => appState.enroll(widget.lectureId),
+      variant: ConfirmDialogVariant.defaultVariant,
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    // 총 시간 계산 (React 코드 그대로)
-    // int totalMinutes = _parts.fold(0, (acc, part) {
-    //   final split = part.duration.split(':');
-    //   final min = int.tryParse(split[0]) ?? 0;
-    //   return acc + min;
-    // });
-    int totalMinutes = 5;
     final appState = context.watch<AppState>();
     final lecture = widget.lecture;
     final isEnrolled = appState.isEnrolled(widget.lectureId);
@@ -73,7 +56,7 @@ class _LectureDetailRightState extends State<LectureDetailRight> {
                 borderRadius: BorderRadius.circular(12),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.03),
+                    color: Colors.black.withValues(alpha: 0.03),
                     blurRadius: 8,
                   )
                 ],
@@ -87,15 +70,8 @@ class _LectureDetailRightState extends State<LectureDetailRight> {
                       Text(
                         '총 ${widget.parts.length}개 파트',
                         style: const TextStyle(
-                          fontSize: 12,
-                          color: AppColors.mutedForeground,
-                        ),
-                      ),
-                      const SizedBox(height: 4),
-                      Text(
-                        '${totalMinutes}분',
-                        style: const TextStyle(
                           fontSize: 22,
+                          color: AppColors.foreground,
                           fontWeight: FontWeight.bold,
                         ),
                       ),
@@ -107,7 +83,21 @@ class _LectureDetailRightState extends State<LectureDetailRight> {
                   SizedBox(
                     width: double.infinity,
                     child: ElevatedButton(
-                      onPressed: () => _showEnrollDialog(context, appState),
+                      onPressed: () {
+                        if (isEnrolled) {
+                          final totalParts = widget.parts.length;
+                          final completedCount = appState.completedPartsFor(widget.lectureId).length;
+                          final nextPartIndex = completedCount.clamp(0, totalParts - 1);
+                          final nextPartId = widget.parts[nextPartIndex].partId;
+                          Navigator.pushNamed(context, AppRouter.lectureWatch, arguments: {
+                            'lectureId': widget.lecture.lectureId,
+                            'partId': nextPartId,
+                            'lectureTitle': widget.lecture.title,
+                          });
+                        } else {
+                          _showEnrollDialog(context, appState);
+                        }
+                      },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primary,
                         shape: RoundedRectangleBorder(

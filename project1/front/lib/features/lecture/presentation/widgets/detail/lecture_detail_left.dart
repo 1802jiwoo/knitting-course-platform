@@ -41,7 +41,7 @@ class _LectureDetailLeftState extends State<LectureDetailLeft> {
       children: [
         const SizedBox(height: 20,),
 
-        LectureDetailThumbnail(),
+        LectureDetailThumbnail(lectureType: widget.lecture.lectureType,),
 
         const SizedBox(height: 30),
 

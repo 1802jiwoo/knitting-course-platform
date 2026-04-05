@@ -60,9 +60,16 @@ class AppState extends ChangeNotifier {
     }
   }
 
-  void cancelEnrollment(int lectureId) {
+  Future<void> cancelEnrollment(int lectureId) async {
     _enrolledLectureIds.remove(lectureId);
     _completedParts.remove(lectureId);
+
+    final prefs = await SharedPreferences.getInstance();
+    final keys = prefs.getKeys().where((k) => k.startsWith('row_counter_${lectureId}_'));
+    for (final key in keys) {
+      await prefs.remove(key);
+    }
+
     _save();
     notifyListeners();
   }

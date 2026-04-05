@@ -31,6 +31,16 @@ class MyLectureCard extends StatefulWidget {
 }
 
 class _MyLectureCardState extends State<MyLectureCard> {
+
+  String _getImage() {
+    switch (widget.lecture.lectureType) {
+      case 'BASIC': return 'https://i.pinimg.com/736x/0d/eb/d8/0debd8a1fdfb48ae02d597c13d5d5e7d.jpg';
+      case 'PROJECT': return 'https://i.pinimg.com/736x/93/10/e4/9310e46a0d10bb95d76cb4866c5742d6.jpg';
+      case 'PATTERN': return 'https://i.pinimg.com/736x/1e/41/cf/1e41cfebfc77d2e2372a270ebcd3844a.jpg';
+      default: return '';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -38,6 +48,7 @@ class _MyLectureCardState extends State<MyLectureCard> {
         // navigate(`/lecture/${lecture.id}`)
       },
       child: Container(
+        margin: EdgeInsets.only(bottom: 20),
         height: context.isTablet ? 260 : 480,
         decoration: BoxDecoration(
           border: Border.all(color: Colors.black12),
@@ -224,7 +235,7 @@ class _MyLectureCardState extends State<MyLectureCard> {
       width: context.isTablet ? 260 : double.infinity,
       color: Colors.grey.shade200,
       child: Image.network(
-        'https://www.hanbit.co.kr/data/editor/20181219134720_zbkqflmi.jpg'!,
+        _getImage(),
         fit: BoxFit.cover,
       ),
     ),

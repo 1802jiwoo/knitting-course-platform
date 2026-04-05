@@ -268,13 +268,11 @@ class _LectureWatchPageState extends State<LectureWatchPage>
               // ── 도안 탭 ──
               _hasPattern
                   ? PatternPanel(
+                      lectureId: widget.lectureId,
+                      partId: _currentPartId,
                       partPatterns: _partPatterns,
                       lecturePatterns: _lecturePatterns,
                       highlightedPattern: _highlightedPattern,
-                      rowCounter: _rowCounter,
-                      onCounterChange: (d) => setState(
-                        () => _rowCounter = (_rowCounter + d).clamp(0, 9999),
-                      ),
                     )
                   : const Center(
                       child: Padding(

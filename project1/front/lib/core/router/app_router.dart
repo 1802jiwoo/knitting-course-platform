@@ -3,7 +3,7 @@ import '../../features/lecture/presentation/pages/lecture_list_page.dart';
 import '../../features/lecture/presentation/pages/lecture_detail_page.dart';
 import '../../features/lecture/presentation/pages/lecture_watch_page.dart';
 import '../../features/enrollment/presentation/pages/my_lectures_page.dart';
-import '../../features/question/presentation/pages/question_detail_page.dart';
+import '../../features/question/presentation/pages/question_page.dart';
 
 class AppRouter {
   static const String lectureList = '/';
@@ -42,7 +42,7 @@ class AppRouter {
       case questionDetail:
         final args = settings.arguments as Map<String, dynamic>;
         return MaterialPageRoute(
-          builder: (_) => QuestionDetailPage(
+          builder: (_) => QuestionPage(
             lectureTitle: args['lectureTitle'].toString(),
             lectureId: args['lectureId'] as int,
           ),

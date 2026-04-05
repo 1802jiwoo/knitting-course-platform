@@ -1,21 +1,85 @@
 import 'package:flutter/material.dart';
 import 'package:loop_learn/core/theme/app_colors.dart';
+import 'package:loop_learn/features/question/presentation/widgets/question_detail_dialog.dart';
+import 'package:provider/provider.dart';
 
+import '../../domain/entities/answer.dart';
 import '../../domain/entities/question.dart';
+import '../../domain/repositories/answer_repository.dart';
+import '../../domain/repositories/question_repository.dart';
 
-class QuestionCard extends StatelessWidget {
+class QuestionCard extends StatefulWidget {
   final Question question;
-  final VoidCallback onTap;
 
-  const QuestionCard({super.key, required this.question, required this.onTap});
+  const QuestionCard({super.key, required this.question});
+
+  @override
+  State<QuestionCard> createState() => _QuestionCardState();
+}
+
+class _QuestionCardState extends State<QuestionCard> {
+  Answer? _answer;
+  Question? _question;
+  bool _isLoading = true;
+  String? _error;
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchData();
+  }
+
+  void _openDetail() {
+    print(_question);
+    showDialog(
+      context: context,
+      builder: (_) => QuestionDetailDialog(
+        question: _question!,
+        answer: _answer,
+        isLoading: _isLoading,
+      ),
+    );
+  }
+
+  Future<void> _fetchData() async {
+    setState(() {
+      _isLoading = true;
+      _error = null;
+    });
+    try {
+      final questionRepo = context.read<QuestionRepository>();
+      final answerRepo = context.read<AnswerRepository>();
+
+      print(questionRepo.getQuestionDetail(widget.question.questionId));
+
+      final results = await Future.wait([
+        questionRepo.getQuestionDetail(widget.question.questionId),
+        answerRepo.getAnswer(widget.question.questionId).catchError((_) => null),
+      ]);
+
+      if (mounted) {
+        setState(() {
+          _question = results[0] as Question;
+          _answer = results[1] as Answer;
+          _isLoading = false;
+        });
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _error = '질문을 불러오지 못했습니다.';
+          _isLoading = false;
+        });
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
-    // final hasAnswer = question.hasAnswer; // bool 필드 또는 getter
-    final hasAnswer = false; // 임시
+    final hasAnswer = _answer != null; // bool 필드 또는 getter
 
     return GestureDetector(
-      onTap: onTap,
+      onTap: () => _openDetail(),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
@@ -41,9 +105,7 @@ class QuestionCard extends StatelessWidget {
                       color: hasAnswer
                           ? const Color(0xFFDCFCE7)
                           : Colors.transparent,
-                      border: hasAnswer
-                          ? null
-                          : Border.all(color: AppColors.muted),
+                      border: Border.all(color: hasAnswer ? Colors.transparent : AppColors.muted),
                       borderRadius: BorderRadius.circular(20),
                     ),
                     child: Row(
@@ -51,7 +113,7 @@ class QuestionCard extends StatelessWidget {
                       children: [
                         if (hasAnswer) ...[
                           const Icon(
-                            Icons.check_circle,
+                            Icons.check_circle_outline,
                             size: 12,
                             color: Color(0xFF15803D),
                           ),
@@ -77,7 +139,7 @@ class QuestionCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    question.title,
+                    widget.question.title,
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
@@ -86,7 +148,7 @@ class QuestionCard extends StatelessWidget {
                   ),
                   const SizedBox(height: 6),
                   Text(
-                    '${question.userId}  •  ${question.createdAt.toString().substring(0, 10)}',
+                    '${widget.question.nickname}  •  ${widget.question.createdAt.toString().substring(0, 10)}',
                     style: TextStyle(
                       fontSize: 12,
                       color: AppColors.mutedForeground,
@@ -96,12 +158,12 @@ class QuestionCard extends StatelessWidget {
               ),
             ),
             // 이미지 썸네일 (있을 때만)
-            if (question.imageUrl != null && question.imageUrl!.isNotEmpty) ...[
+            if (widget.question.imageUrl != null && widget.question.imageUrl!.isNotEmpty) ...[
               const SizedBox(width: 12),
               ClipRRect(
                 borderRadius: BorderRadius.circular(8),
                 child: Image.network(
-                  question.imageUrl!,
+                  widget.question.imageUrl!,
                   width: 72,
                   height: 72,
                   fit: BoxFit.cover,

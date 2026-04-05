@@ -3,7 +3,7 @@ import '../../domain/entities/question.dart';
 class QuestionModel extends Question {
   const QuestionModel({
     required super.questionId,
-    required super.userId,
+    required super.nickname,
     required super.lectureId,
     required super.title,
     required super.content,
@@ -16,7 +16,7 @@ class QuestionModel extends Question {
     required int lectureId,
   }) => QuestionModel(
     questionId: json['questionId'] as int,
-    userId: 0,
+    nickname: json['nickname'] as String,
     lectureId: lectureId,
     title: json['title'] as String,
     content: '',
@@ -27,7 +27,7 @@ class QuestionModel extends Question {
   factory QuestionModel.fromDetailJson(Map<String, dynamic> json) =>
       QuestionModel(
         questionId: json['questionId'] as int,
-        userId: 0,
+        nickname: json['nickname'] as String,
         lectureId: json['lectureId'] as int,
         title: json['title'] as String,
         content: json['content'] as String,

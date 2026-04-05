@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/extensions/context_extension.dart';
 import '../../../../core/router/app_router.dart';
 import '../../../../core/state/app_state.dart';
+import '../../../../core/widgets/confirm_dialog.dart';
 import '../../../../features/lecture/domain/entities/lecture.dart';
 import '../../../../features/lecture/domain/repositories/lecture_repository.dart';
 import '../../../lecture/presentation/widgets/shared_widgets.dart';
@@ -60,40 +61,19 @@ class _MyLecturesPageState extends State<MyLecturesPage> {
     int lectureId,
     String title,
   ) {
-    showDialog(
+    ConfirmDialog.show(
       context: context,
-      builder: (_) => AlertDialog(
-        title: const Text('수강 취소', style: TextStyle(fontSize: 15)),
-        content: Text.rich(
-          TextSpan(
-            children: [
-              TextSpan(
-                text: title,
-                style: const TextStyle(fontWeight: FontWeight.w600),
-              ),
-              const TextSpan(text: ' 강의를 수강 취소하시겠습니까?\n취소 후 진도 정보도 함께 삭제됩니다.'),
-            ],
-          ),
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('아니오'),
-          ),
-          TextButton(
-            onPressed: () {
-              appState.cancelEnrollment(lectureId);
-              _lectureInfoMap.remove(lectureId);
-              Navigator.pop(context);
-              setState(() {});
-            },
-            child: const Text(
-              '취소 확인',
-              style: TextStyle(color: Colors.red, fontWeight: FontWeight.w600),
-            ),
-          ),
-        ],
-      ),
+      title: '수강 취소',
+      message: '정말로 수강을 취소하시겠습니까?',
+      warningMessage: '진도 정보가 함께 삭제됩니다.',
+      confirmText: '취소하기',
+      cancelText: '아니오',
+      variant: ConfirmDialogVariant.danger,
+      onConfirm: () {
+        appState.cancelEnrollment(lectureId);
+        _lectureInfoMap.remove(lectureId);
+        setState(() {});
+      },
     );
   }
 
