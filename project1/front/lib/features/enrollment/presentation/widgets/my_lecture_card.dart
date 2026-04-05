@@ -124,11 +124,11 @@ class _MyLectureCardState extends State<MyLectureCard> {
           Spacer(),
 
           /// 태그
-          // Wrap(
-          //   spacing: 6,
-          //   runSpacing: 6,
-          //   children: tags.map((t) => TagPill(label: t)).toList(),
-          // ),
+          Wrap(
+            spacing: 6,
+            runSpacing: 6,
+            children: widget.tags.map((t) => TagPill(label: t)).toList(),
+          ),
           const SizedBox(height: 12),
 
           /// Progress

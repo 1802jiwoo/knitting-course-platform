@@ -91,7 +91,10 @@ class _LectureCardState extends State<LectureCard> {
                       const SizedBox(height: 12),
 
                       // 태그 (tagNames 필드 추가 시 연결)
-                      Wrap(spacing: 8, runSpacing: 8, children: const []),
+                      Wrap(spacing: 8, runSpacing: 8,
+                        children: List.generate(widget.lecture.tagNames.length,
+                        (index) => TagPill(label: widget.lecture.tagNames[index]),
+                      ),),
                     ],
                   ),
                 ),

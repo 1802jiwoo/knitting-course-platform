@@ -20,12 +20,12 @@ final List<Tag> dummyTags = [
 
 // ── 강의 ──────────────────────────────────────────────────────
 final List<Lecture> dummyLectures = [
-  Lecture(lectureId: 1, title: '기초 뜨개질', description: '초보자를 위한 뜨개질 강의입니다. 기초 기법을 단계별로 익히고 나만의 작품을 완성해 보세요.', lectureType: 'BASIC', instructorName: '강사님', createdAt: DateTime(2026, 3, 1)),
-  Lecture(lectureId: 2, title: '귀여운 인형 만들기', description: '단계별로 따라 하면 누구나 만들 수 있는 뜨개 인형 강의입니다.', lectureType: 'PROJECT', instructorName: '강사님', createdAt: DateTime(2026, 3, 5)),
-  Lecture(lectureId: 3, title: '미니 가방 도안', description: '영상 없이 도안만으로 제작하는 미니 가방입니다.', lectureType: 'PATTERN', instructorName: '강사님', createdAt: DateTime(2026, 3, 8)),
-  Lecture(lectureId: 4, title: '겉뜨기 · 안뜨기', description: '뜨개질의 기본인 겉뜨기와 안뜨기를 마스터합니다.', lectureType: 'BASIC', instructorName: '강사님', createdAt: DateTime(2026, 3, 10)),
-  Lecture(lectureId: 5, title: '뜨개 모자 완성하기', description: '겨울 시즌에 딱 맞는 뜨개 모자 제작 과정입니다.', lectureType: 'PROJECT', instructorName: '강사님', createdAt: DateTime(2026, 3, 12)),
-  Lecture(lectureId: 6, title: '곰돌이 인형 도안', description: '귀여운 곰돌이 인형을 도안으로 제작합니다.', lectureType: 'PATTERN', instructorName: '강사님', createdAt: DateTime(2026, 3, 14)),
+  // Lecture(lectureId: 1, title: '기초 뜨개질', description: '초보자를 위한 뜨개질 강의입니다. 기초 기법을 단계별로 익히고 나만의 작품을 완성해 보세요.', lectureType: 'BASIC', instructorName: '강사님', createdAt: DateTime(2026, 3, 1)),
+  // Lecture(lectureId: 2, title: '귀여운 인형 만들기', description: '단계별로 따라 하면 누구나 만들 수 있는 뜨개 인형 강의입니다.', lectureType: 'PROJECT', instructorName: '강사님', createdAt: DateTime(2026, 3, 5)),
+  // Lecture(lectureId: 3, title: '미니 가방 도안', description: '영상 없이 도안만으로 제작하는 미니 가방입니다.', lectureType: 'PATTERN', instructorName: '강사님', createdAt: DateTime(2026, 3, 8)),
+  // Lecture(lectureId: 4, title: '겉뜨기 · 안뜨기', description: '뜨개질의 기본인 겉뜨기와 안뜨기를 마스터합니다.', lectureType: 'BASIC', instructorName: '강사님', createdAt: DateTime(2026, 3, 10)),
+  // Lecture(lectureId: 5, title: '뜨개 모자 완성하기', description: '겨울 시즌에 딱 맞는 뜨개 모자 제작 과정입니다.', lectureType: 'PROJECT', instructorName: '강사님', createdAt: DateTime(2026, 3, 12)),
+  // Lecture(lectureId: 6, title: '곰돌이 인형 도안', description: '귀여운 곰돌이 인형을 도안으로 제작합니다.', lectureType: 'PATTERN', instructorName: '강사님', createdAt: DateTime(2026, 3, 14)),
 ];
 
 // ── 강의-태그 매핑 ────────────────────────────────────────────

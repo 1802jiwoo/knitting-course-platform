@@ -11,7 +11,12 @@ import 'lecture_detail_curriculum.dart';
 import 'lecture_detail_thumbnail.dart';
 
 class LectureDetailLeft extends StatefulWidget {
-  const LectureDetailLeft({super.key, required this.lecture, required this.lectureId, required this.parts});
+  const LectureDetailLeft({
+    super.key,
+    required this.lecture,
+    required this.lectureId,
+    required this.parts,
+  });
 
   final Lecture lecture;
   final int lectureId;
@@ -28,9 +33,9 @@ class _LectureDetailLeftState extends State<LectureDetailLeft> {
     final isEnrolled = appState.isEnrolled(widget.lectureId);
 
     return Expanded(
-      child: context.isTablet ? SingleChildScrollView(
-        child: content(isEnrolled),
-      ) : content(isEnrolled),
+      child: context.isTablet
+          ? SingleChildScrollView(child: content(isEnrolled))
+          : content(isEnrolled),
     );
   }
 
@@ -39,9 +44,9 @@ class _LectureDetailLeftState extends State<LectureDetailLeft> {
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const SizedBox(height: 20,),
+        const SizedBox(height: 20),
 
-        LectureDetailThumbnail(lectureType: widget.lecture.lectureType,),
+        LectureDetailThumbnail(lectureType: widget.lecture.lectureType),
 
         const SizedBox(height: 30),
 
@@ -53,14 +58,21 @@ class _LectureDetailLeftState extends State<LectureDetailLeft> {
 
             if (isEnrolled)
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                  vertical: 3,
+                ),
                 decoration: BoxDecoration(
                   border: Border.all(color: AppColors.primary),
                   borderRadius: BorderRadius.circular(200),
                 ),
                 child: const Text(
                   '수강 중',
-                  style: TextStyle(fontSize: 11, fontWeight: FontWeight.w500, color: AppColors.primary),
+                  style: TextStyle(
+                    fontSize: 11,
+                    fontWeight: FontWeight.w500,
+                    color: AppColors.primary,
+                  ),
                 ),
               ),
           ],
@@ -94,7 +106,31 @@ class _LectureDetailLeftState extends State<LectureDetailLeft> {
           ],
         ),
 
-        const SizedBox(height: 30),
+        const SizedBox(height: 15),
+
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: List.generate(
+            widget.lecture.tagNames.length,
+            (index) => Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3),
+              decoration: BoxDecoration(
+                color: AppColors.secondary,
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                '#${widget.lecture.tagNames[index]}',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: AppColors.mutedForeground,
+                ),
+              ),
+            ),
+          ),
+        ),
+
+        const SizedBox(height: 15),
 
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,

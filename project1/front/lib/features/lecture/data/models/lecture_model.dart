@@ -1,8 +1,6 @@
 import '../../domain/entities/lecture.dart';
 
 class LectureModel extends Lecture {
-  final List<String> tagNames;
-
   const LectureModel({
     required super.lectureId,
     required super.title,
@@ -10,7 +8,7 @@ class LectureModel extends Lecture {
     required super.lectureType,
     required super.instructorName,
     required super.createdAt,
-    this.tagNames = const [],
+    required super.tagNames,
   });
 
   factory LectureModel.fromJson(Map<String, dynamic> json) => LectureModel(

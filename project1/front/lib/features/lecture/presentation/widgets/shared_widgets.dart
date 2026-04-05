@@ -151,14 +151,13 @@ class TagPill extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 3),
       decoration: BoxDecoration(
-        color: Colors.grey.shade100,
-        border: Border.all(color: Colors.black12),
+        color: AppColors.secondary,
         borderRadius: BorderRadius.circular(99),
       ),
-      child: Text(label,
-          style: const TextStyle(fontSize: 10, color: Colors.black54)),
+      child: Text('#$label',
+          style: TextStyle(fontSize: 10, color: AppColors.mutedForeground)),
     );
   }
 }

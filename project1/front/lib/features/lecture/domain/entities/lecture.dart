@@ -5,6 +5,7 @@ class Lecture {
   final String lectureType;
   final String instructorName;
   final DateTime createdAt;
+  final List<String> tagNames;
 
   const Lecture({
     required this.lectureId,
@@ -13,5 +14,6 @@ class Lecture {
     required this.lectureType,
     required this.instructorName,
     required this.createdAt,
+    required this.tagNames,
   });
 }

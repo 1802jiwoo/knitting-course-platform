@@ -163,7 +163,7 @@ class _LectureListPageState extends State<LectureListPage> {
                     crossAxisCount: context.isTablet ? 4 : 1,
                     mainAxisSpacing: 24,
                     crossAxisSpacing: 24,
-                    childAspectRatio: 0.9,
+                    childAspectRatio: 0.95,
                   ),
                   delegate: SliverChildBuilderDelegate(
                         (_, i) {
