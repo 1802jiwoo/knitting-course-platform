@@ -1,7 +1,7 @@
 erDiagram
 
 USER {
-    int user_id PK
+    bigint user_id PK
     string email
     string password
     string nickname
@@ -10,38 +10,39 @@ USER {
 }
 
 LECTURE {
-    int lecture_id PK
+    bigint lecture_id PK
     string title
     text description
     string lecture_type
     string instructor_name
     datetime created_at
+    bigint user_id FK
 }
 
 LECTURE_PART {
-    int part_id PK
-    int lecture_id FK
+    bigint part_id PK
+    bigint lecture_id FK
     string title
     int order_no
 }
 
 VIDEO {
-    int video_id PK
-    int part_id FK
+    bigint video_id PK
+    bigint part_id FK
     string youtube_url
     int duration
 }
 
 LECTURE_PATTERN {
-    int pattern_id PK
-    int lecture_id FK
+    bigint pattern_id PK
+    bigint lecture_id FK
     int row_num
     text pattern_text
 }
 
 PART_PATTERN {
-    int pattern_id PK
-    int part_id FK
+    bigint pattern_id PK
+    bigint part_id FK
     int start_time
     int end_time
     int row_num
@@ -49,25 +50,25 @@ PART_PATTERN {
 }
 
 PATTERN_SYMBOL {
-    int symbol_id PK
+    bigint symbol_id PK
     string symbol
-    string description
+    text description
 }
 
 TAG {
-    int tag_id PK
+    bigint tag_id PK
     string tag_name
 }
 
 LECTURE_TAG {
-    int lecture_id FK
-    int tag_id FK
+    bigint lecture_id FK
+    bigint tag_id FK
 }
 
 QUESTION {
-    int question_id PK
-    int user_id FK
-    int lecture_id FK
+    bigint question_id PK
+    bigint user_id FK
+    bigint lecture_id FK
     string title
     text content
     string image_url
@@ -75,17 +76,17 @@ QUESTION {
 }
 
 ANSWER {
-    int answer_id PK
-    int question_id FK
-    int instructor_id FK
+    bigint answer_id PK
+    bigint question_id FK
+    bigint instructor_id FK
     text content
     datetime created_at
 }
 
 ENROLLMENT {
-    int enrollment_id PK
-    int user_id FK
-    int lecture_id FK
+    bigint enrollment_id PK
+    bigint user_id FK
+    bigint lecture_id FK
     int completed_parts
     int total_parts
     int progress
@@ -104,6 +105,7 @@ TAG ||--o{ LECTURE_TAG : used_in
 USER ||--o{ QUESTION : asks
 LECTURE ||--o{ QUESTION : has
 QUESTION ||--o{ ANSWER : receives
+USER ||--o{ ANSWER : answers
 
 USER ||--o{ ENROLLMENT : enrolls
 LECTURE ||--o{ ENROLLMENT : enrolled_in

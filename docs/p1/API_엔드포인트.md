@@ -123,7 +123,7 @@ GET /api/parts/{partId}/video
 ```json
 {
   "videoId": 1,
-  "youtubeUrl": "https://youtube.com/xxxx",
+  "youtubeUrl": "영상 id",
   "duration": 1200
 }
 ```
@@ -377,6 +377,7 @@ POST /api/questions
 | 필드 | 타입 | 필수 | 제약 조건 |
 |------|------|------|---------|
 | lectureId | int | Y | - |
+| userId | int | N | 없으면 익명 처리 |
 | title | string | Y | 최대 100자 |
 | content | string | Y | 최대 1000자 |
 | image | file | N | 1장, 최대 5MB, jpg/png/gif |
@@ -398,6 +399,7 @@ GET /api/lectures/{lectureId}/questions
   {
     "questionId": 1,
     "title": "3단에서 막혔어요",
+    "nickname": "익명",
     "createdAt": "2026-03-12T10:00:00"
   }
 ]
@@ -419,6 +421,7 @@ GET /api/questions/{questionId}
 {
   "questionId": 1,
   "lectureId": 1,
+  "nickname": "익명",
   "title": "3단에서 막혔어요",
   "content": "여기서 어떻게 해야 하나요?",
   "imageUrl": "https://...",
@@ -427,6 +430,44 @@ GET /api/questions/{questionId}
 ```
 
 ---
+
+## 10. 답변 (Answers)
+
+### 답변 조회
+
+특정 질문에 등록된 답변을 조회한다.
+
+```
+GET /api/questions/{questionId}/answer
+```
+
+#### Path Parameters
+
+| 파라미터 | 타입 | 필수 | 설명 |
+|---------|------|------|------|
+| questionId | int | Y | 질문 ID |
+
+#### Response
+
+```json
+{
+  "answerId": 1,
+  "content": "3단에서는 이렇게 하시면 됩니다.",
+  "nickname": "지우",
+  "createdAt": "2026-03-12T10:00:00"
+}
+```
+
+---
+
+### API 구조 요약 추가분
+
+```
+/api
+ └ answers (questions 하위)
+    ├ GET  /questions/{questionId}/answer   답변 목록 조회
+    └ GET  /answers/{answerId}               답변 상세 조회
+```
 
 ## 10. API 구조 요약
 
@@ -456,6 +497,9 @@ GET /api/questions/{questionId}
  ├ questions
  │  ├ POST /questions                       질문 작성
  │  └ GET  /questions/{id}                  질문 상세 조회
+ │
+ ├ answers (questions 하위)
+ |  ├ GET  /questions/{questionId}/answers   답변 목록 조회
  │
  └ tags
     └ GET  /tags                            태그 목록 조회
