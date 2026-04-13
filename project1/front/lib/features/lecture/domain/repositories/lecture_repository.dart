@@ -7,9 +7,7 @@ import '../entities/tag.dart';
 
 abstract class LectureRepository {
   Future<List<Lecture>> getLectures({
-    String? title,
-    String? tag,
-    String? instructor,
+    String? keyword,
   });
 
   Future<Lecture> getLectureDetail(int lectureId);

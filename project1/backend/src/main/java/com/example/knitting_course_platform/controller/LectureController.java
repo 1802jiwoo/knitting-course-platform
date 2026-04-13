@@ -16,11 +16,9 @@ public class LectureController {
     // GET /api/lectures?title=&tag=&instructor=
     @GetMapping("/lectures")
     public List<LectureListResponse> getLectures(
-            @RequestParam(required = false) String title,
-            @RequestParam(required = false) String tag,
-            @RequestParam(required = false) String instructor
+            @RequestParam(required = false) String keyword
     ) {
-        return lectureService.getLectures(title, tag, instructor);
+        return lectureService.getLectures(keyword);
     }
 
     // GET /api/lectures/{lectureId}

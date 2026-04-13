@@ -60,8 +60,7 @@ class _LectureListPageState extends State<LectureListPage> {
     try {
       final repo = context.read<LectureRepository>();
       final result = await repo.getLectures(
-        title:      _searchKeyword.isEmpty ? null : _searchKeyword,
-        instructor: _searchKeyword.isEmpty ? null : _searchKeyword,
+        keyword: _searchKeyword.isEmpty ? null : _searchKeyword,
       );
       if (mounted) setState(() { _lectures = result; _isLoading = false; });
     } catch (e) {

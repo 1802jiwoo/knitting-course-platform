@@ -21,8 +21,8 @@ public class LectureService {
     private final TagRepository tagRepository;
 
     // GET /api/lectures
-    public List<LectureListResponse> getLectures(String title, String tag, String instructor) {
-        return lectureRepository.search(title, instructor, tag)
+    public List<LectureListResponse> getLectures(String keyword) {
+        return lectureRepository.search(keyword)
                 .stream()
                 .map(LectureListResponse::from)
                 .toList();

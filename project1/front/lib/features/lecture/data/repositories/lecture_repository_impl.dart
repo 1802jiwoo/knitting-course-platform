@@ -21,16 +21,12 @@ class LectureRepositoryImpl implements LectureRepository {
   // 강의 가져오기
   @override
   Future<List<Lecture>> getLectures({
-    String? title,
-    String? tag,
-    String? instructor,
+    String? keyword,
   }) async {
     final data = await _api.get(
       '/lectures',
       queryParams: {
-        'title': title,
-        'tag': tag,
-        'instructor': instructor,
+        'keyword': keyword,
       },
     ) as List<dynamic>;
 

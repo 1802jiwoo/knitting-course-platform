@@ -14,14 +14,13 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
         LEFT JOIN l.user u
         LEFT JOIN l.lectureTags lt
         LEFT JOIN lt.tag t
-        WHERE (:title IS NULL OR l.title LIKE CONCAT('%', :title, '%'))
-          AND (:instructor IS NULL OR u.nickname LIKE CONCAT('%', :instructor, '%'))
-          AND (:tag IS NULL OR t.tagName = :tag)
+        WHERE :keyword IS NULL
+           OR l.title LIKE CONCAT('%', :keyword, '%')
+           OR u.nickname LIKE CONCAT('%', :keyword, '%')
+           OR t.tagName LIKE CONCAT('%', :keyword, '%')
         ORDER BY l.lectureId ASC
     """)
     List<Lecture> search(
-        @Param("title") String title,
-        @Param("instructor") String instructor,
-        @Param("tag") String tag
+        @Param("keyword") String keyword
     );
 }
