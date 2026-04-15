@@ -5,7 +5,10 @@ import com.example.knitting_course_platform.service.QuestionService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
 import java.util.List;
 
 @RestController
@@ -28,9 +31,11 @@ public class QuestionController {
     }
 
     // POST /api/questions
-    @PostMapping("/questions")
+    @PostMapping(value = "/questions", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public void createQuestion(@RequestBody @Valid QuestionCreateRequest request) {
-        questionService.createQuestion(request);
+    public void createQuestion(
+            @RequestPart("request") @Valid QuestionCreateRequest request,
+            @RequestPart(value = "image", required = false) MultipartFile image) {  // List -> 단일로 변경
+        questionService.createQuestion(request, image);
     }
 }

@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 import '../../domain/entities/question.dart';
 import '../../domain/repositories/question_repository.dart';
 import '../models/question_model.dart';
@@ -38,11 +40,35 @@ class QuestionRepositoryImpl implements QuestionRepository {
     required int lectureId,
     required String title,
     required String content,
-    String? imageUrl,
+    XFile? image,
   }) async {
-    await _api.post(
+    List<int>? imageBytes;
+    String? mimeType;
+    String? fileName;
+
+    if (image != null) {
+      imageBytes = await image.readAsBytes();
+      mimeType = image.mimeType ?? _guessMimeType(image.path);
+      fileName = image.name;
+    }
+
+    await _api.postMultipart(
       '/questions',
-      body: {'lectureId': lectureId, 'title': title, 'content': content},
+      jsonFields: {'lectureId': lectureId, 'title': title, 'content': content},
+      fileField: image != null ? 'image' : null,
+      fileBytes: imageBytes,
+      fileName: fileName,
+      mimeType: mimeType,
     );
+  }
+
+  String _guessMimeType(String path) {
+    final ext = path.split('.').last.toLowerCase();
+    return switch (ext) {
+      'jpg' || 'jpeg' => 'image/jpeg',
+      'png' => 'image/png',
+      'gif' => 'image/gif',
+      _ => 'image/jpeg',
+    };
   }
 }

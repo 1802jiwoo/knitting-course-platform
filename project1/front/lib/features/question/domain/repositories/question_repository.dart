@@ -1,3 +1,5 @@
+import 'package:image_picker/image_picker.dart';
+
 import '../entities/question.dart';
 
 abstract class QuestionRepository {
@@ -9,6 +11,6 @@ abstract class QuestionRepository {
     required int lectureId,
     required String title,
     required String content,
-    String? imageUrl,
+    XFile? image,
   });
 }

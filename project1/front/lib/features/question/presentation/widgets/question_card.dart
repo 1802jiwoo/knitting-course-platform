@@ -157,19 +157,6 @@ class _QuestionCardState extends State<QuestionCard> {
                 ],
               ),
             ),
-            // 이미지 썸네일 (있을 때만)
-            if (widget.question.imageUrl != null && widget.question.imageUrl!.isNotEmpty) ...[
-              const SizedBox(width: 12),
-              ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: Image.network(
-                  widget.question.imageUrl!,
-                  width: 72,
-                  height: 72,
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ],
           ],
         ),
       ),

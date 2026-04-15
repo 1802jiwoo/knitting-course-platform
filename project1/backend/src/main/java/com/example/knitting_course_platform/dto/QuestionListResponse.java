@@ -8,6 +8,7 @@ public record QuestionListResponse(
     Long questionId,
     String title,
     String nickname,
+    String imageUrl,
     LocalDateTime createdAt
 ) {
     public static QuestionListResponse from(Question q) {
@@ -15,6 +16,7 @@ public record QuestionListResponse(
             q.getQuestionId(),
             q.getTitle(),
             q.getUser().getNickname(),
+            q.getImageUrl(),
             q.getCreatedAt()
         );
     }

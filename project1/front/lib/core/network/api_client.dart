@@ -1,11 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import '../error/api_exception.dart';
 
 class ApiClient {
-  // static const String baseUrl = 'http://10.33.130.21:8080/api';
-  static const String baseUrl = 'http://192.168.200.161:8080/api';
+  static const String baseUrl = 'http://10.252.60.21:8080/api';
+  // static const String baseUrl = 'http://192.168.200.161:8080/api';
   // static const String baseUrl = 'http://172.28.6.110:8080/api';
 
   final http.Client _client;
@@ -28,6 +29,39 @@ class ApiClient {
       body: body != null ? jsonEncode(body) : null,
     );
     
+    return _handleResponse(response);
+  }
+
+  Future<dynamic> postMultipart(
+    String path, {
+    required Map<String, dynamic> jsonFields,
+    String? fileField,
+    List<int>? fileBytes,
+    String? fileName,
+    String? mimeType,
+  }) async {
+    final uri = _buildUri(path, null);
+    final request = http.MultipartRequest('POST', uri);
+
+    request.files.add(http.MultipartFile.fromString(
+      'request',
+      jsonEncode(jsonFields),
+      contentType: MediaType('application', 'json'),
+    ));
+
+    if (fileBytes != null && fileField != null) {
+      final mediaType =
+          mimeType != null ? MediaType.parse(mimeType) : MediaType('image', 'jpeg');
+      request.files.add(http.MultipartFile.fromBytes(
+        fileField,
+        fileBytes,
+        filename: fileName ?? 'image',
+        contentType: mediaType,
+      ));
+    }
+
+    final streamed = await _client.send(request);
+    final response = await http.Response.fromStream(streamed);
     return _handleResponse(response);
   }
 

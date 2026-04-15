@@ -1,4 +1,4 @@
-import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:loop_learn/core/theme/app_colors.dart';
@@ -25,6 +25,7 @@ class WriteQuestionDialogState extends State<WriteQuestionDialog> {
   final _titleController = TextEditingController();
   final _contentController = TextEditingController();
   XFile? _pickedImage;
+  Uint8List? _pickedImageBytes; // 미리보기·업로드 공용 바이트 캐시
   bool _isSubmitting = false;
 
   @override
@@ -41,8 +42,20 @@ class WriteQuestionDialogState extends State<WriteQuestionDialog> {
   Future<void> _pickImage() async {
     final picker = ImagePicker();
     final file = await picker.pickImage(source: ImageSource.gallery);
-    if (file != null) setState(() => _pickedImage = file);
+    if (file == null) return;
+
+    // 웹·모바일 공통: XFile.readAsBytes()로 바이트를 미리 읽어 둠
+    final bytes = await file.readAsBytes();
+    setState(() {
+      _pickedImage = file;
+      _pickedImageBytes = bytes;
+    });
   }
+
+  void _removeImage() => setState(() {
+        _pickedImage = null;
+        _pickedImageBytes = null;
+      });
 
   Future<void> _submit() async {
     if (!_canSubmit) {
@@ -62,6 +75,7 @@ class WriteQuestionDialogState extends State<WriteQuestionDialog> {
         lectureId: widget.lectureId,
         title: title,
         content: content,
+        image: _pickedImage,
       );
       if (mounted) {
         ScaffoldMessenger.of(
@@ -123,13 +137,13 @@ class WriteQuestionDialogState extends State<WriteQuestionDialog> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    title(),
+                    _buildTitle(),
                     const SizedBox(height: 16),
-                    content(),
+                    _buildContent(),
                     const SizedBox(height: 16),
-                    image(),
+                    _buildImage(),
                     const SizedBox(height: 24),
-                    buttons(),
+                    _buildButtons(),
                     const SizedBox(height: 10),
                   ],
                 ),
@@ -141,213 +155,216 @@ class WriteQuestionDialogState extends State<WriteQuestionDialog> {
     );
   }
 
-  Widget title() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Text(
-        '제목',
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: AppColors.foreground,
-        ),
-      ),
-      const SizedBox(height: 8),
-      TextField(
-        controller: _titleController,
-        onChanged: (_) => setState(() {}),
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: AppColors.secondary,
-          hintText: '질문 제목을 입력하세요',
-          hintStyle: const TextStyle(
-            fontSize: 13,
-            color: AppColors.mutedForeground,
+  Widget _buildTitle() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '제목',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppColors.foreground,
+            ),
           ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 12,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.transparent),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.transparent),
-          ),
-        ),
-      ),
-    ],
-  );
-
-  Widget content() => Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      const Text(
-        '내용',
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: AppColors.foreground,
-        ),
-      ),
-      const SizedBox(height: 8),
-      TextField(
-        controller: _contentController,
-        onChanged: (_) => setState(() {}),
-        minLines: 6,
-        maxLines: 10,
-        decoration: InputDecoration(
-          filled: true,
-          fillColor: AppColors.secondary,
-          hintText: '질문 내용을 입력하세요',
-          hintStyle: const TextStyle(
-            fontSize: 13,
-            color: AppColors.mutedForeground,
-          ),
-          contentPadding: const EdgeInsets.symmetric(
-            horizontal: 14,
-            vertical: 12,
-          ),
-          enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.transparent),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(10),
-            borderSide: BorderSide(color: Colors.transparent),
-          ),
-        ),
-      ),
-    ],
-  );
-
-  Widget image() => Column(
-    children: [
-      const Text(
-        '이미지 (선택사항)',
-        style: TextStyle(
-          fontSize: 13,
-          fontWeight: FontWeight.w600,
-          color: AppColors.foreground,
-        ),
-      ),
-      const SizedBox(height: 8),
-      if (_pickedImage != null)
-        Stack(
-          children: [
-            ClipRRect(
-              borderRadius: BorderRadius.circular(8),
-              child: Image.file(
-                File(_pickedImage!.path),
-                width: 100,
-                height: 100,
-                fit: BoxFit.cover,
+          const SizedBox(height: 8),
+          TextField(
+            controller: _titleController,
+            onChanged: (_) => setState(() {}),
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: AppColors.secondary,
+              hintText: '질문 제목을 입력하세요',
+              hintStyle: const TextStyle(
+                fontSize: 13,
+                color: AppColors.mutedForeground,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: Colors.transparent),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: Colors.transparent),
               ),
             ),
-            Positioned(
-              top: -6,
-              right: -6,
-              child: GestureDetector(
-                onTap: () => setState(() => _pickedImage = null),
-                child: Container(
-                  width: 22,
-                  height: 22,
-                  decoration: BoxDecoration(
-                    color: AppColors.destructive,
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.close,
-                    size: 14,
-                    color: AppColors.destructiveForeground,
-                  ),
-                ),
+          ),
+        ],
+      );
+
+  Widget _buildContent() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '내용',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppColors.foreground,
+            ),
+          ),
+          const SizedBox(height: 8),
+          TextField(
+            controller: _contentController,
+            onChanged: (_) => setState(() {}),
+            minLines: 6,
+            maxLines: 10,
+            decoration: InputDecoration(
+              filled: true,
+              fillColor: AppColors.secondary,
+              hintText: '질문 내용을 입력하세요',
+              hintStyle: const TextStyle(
+                fontSize: 13,
+                color: AppColors.mutedForeground,
+              ),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 12,
+              ),
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: Colors.transparent),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: const BorderSide(color: Colors.transparent),
               ),
             ),
-          ],
-        )
-      else
-        GestureDetector(
-          onTap: _pickImage,
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-            decoration: BoxDecoration(
-              color: AppColors.secondary,
-              borderRadius: BorderRadius.circular(8),
-              border: Border.all(color: AppColors.border),
+          ),
+        ],
+      );
+
+  Widget _buildImage() => Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            '이미지 (선택사항)',
+            style: TextStyle(
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              color: AppColors.foreground,
             ),
-            child: const Row(
-              mainAxisSize: MainAxisSize.min,
+          ),
+          const SizedBox(height: 8),
+          if (_pickedImageBytes != null)
+            Stack(
               children: [
-                Icon(
-                  Icons.upload_outlined,
-                  size: 16,
-                  color: AppColors.mutedForeground,
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(8),
+                  // Image.memory: 웹·모바일 모두 지원
+                  child: Image.memory(
+                    _pickedImageBytes!,
+                    width: 100,
+                    height: 100,
+                    fit: BoxFit.cover,
+                  ),
                 ),
-                SizedBox(width: 6),
-                Text(
-                  '이미지 업로드',
-                  style: TextStyle(
-                    fontSize: 13,
-                    color: AppColors.mutedForeground,
+                Positioned(
+                  top: -6,
+                  right: -6,
+                  child: GestureDetector(
+                    onTap: _removeImage,
+                    child: Container(
+                      width: 22,
+                      height: 22,
+                      decoration: const BoxDecoration(
+                        color: AppColors.destructive,
+                        shape: BoxShape.circle,
+                      ),
+                      child: const Icon(
+                        Icons.close,
+                        size: 14,
+                        color: AppColors.destructiveForeground,
+                      ),
+                    ),
                   ),
                 ),
               ],
-            ),
-          ),
-        ),
-    ],
-  );
-
-  Widget buttons() => Row(
-    children: [
-      Expanded(
-        child: OutlinedButton(
-          onPressed: () => Navigator.pop(context),
-          style: OutlinedButton.styleFrom(
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            side: const BorderSide(color: AppColors.border),
-          ),
-          child: const Text(
-            '취소',
-            style: TextStyle(color: AppColors.mutedForeground),
-          ),
-        ),
-      ),
-      const SizedBox(width: 10),
-      Expanded(
-        child: ElevatedButton(
-          onPressed: _canSubmit && !_isSubmitting ? _submit : null,
-          style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: AppColors.primaryForeground,
-            disabledBackgroundColor: AppColors.border,
-            padding: const EdgeInsets.symmetric(vertical: 14),
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8),
-            ),
-            elevation: 0,
-          ),
-          child: _isSubmitting
-              ? const SizedBox(
-                  width: 18,
-                  height: 18,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: AppColors.primaryForeground,
-                  ),
-                )
-              : const Text(
-                  '질문 등록',
-                  style: TextStyle(fontWeight: FontWeight.w600),
+            )
+          else
+            GestureDetector(
+              onTap: _pickImage,
+              child: Container(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+                decoration: BoxDecoration(
+                  color: AppColors.secondary,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(color: AppColors.border),
                 ),
-        ),
-      ),
-    ],
-  );
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Icon(
+                      Icons.upload_outlined,
+                      size: 16,
+                      color: AppColors.mutedForeground,
+                    ),
+                    SizedBox(width: 6),
+                    Text(
+                      '이미지 업로드',
+                      style: TextStyle(
+                        fontSize: 13,
+                        color: AppColors.mutedForeground,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+        ],
+      );
+
+  Widget _buildButtons() => Row(
+        children: [
+          Expanded(
+            child: OutlinedButton(
+              onPressed: () => Navigator.pop(context),
+              style: OutlinedButton.styleFrom(
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                side: const BorderSide(color: AppColors.border),
+              ),
+              child: const Text(
+                '취소',
+                style: TextStyle(color: AppColors.mutedForeground),
+              ),
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: ElevatedButton(
+              onPressed: _canSubmit && !_isSubmitting ? _submit : null,
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.primaryForeground,
+                disabledBackgroundColor: AppColors.border,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                elevation: 0,
+              ),
+              child: _isSubmitting
+                  ? const SizedBox(
+                      width: 18,
+                      height: 18,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2,
+                        color: AppColors.primaryForeground,
+                      ),
+                    )
+                  : const Text(
+                      '질문 등록',
+                      style: TextStyle(fontWeight: FontWeight.w600),
+                    ),
+            ),
+          ),
+        ],
+      );
 }

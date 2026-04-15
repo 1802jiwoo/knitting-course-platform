@@ -45,6 +45,10 @@ class QuestionPageState extends State<QuestionPage> {
       if (mounted) {
         setState(() {
           _questions = list;
+          print('질문 리스트 값 : $_questions');
+          print('질문 리스트 값 : ${
+              _questions.map((e) => e.imageUrl,)
+          }');
           _isLoading = false;
         });
       }

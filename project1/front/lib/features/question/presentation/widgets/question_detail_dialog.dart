@@ -142,6 +142,8 @@ class QuestionDetailDialogState extends State<QuestionDetailDialog> {
             ),
           ],
 
+
+
           // ── 답변 섹션 ──────────────────────────────────────
           const SizedBox(height: 24),
           const Divider(color: AppColors.border, height: 1),

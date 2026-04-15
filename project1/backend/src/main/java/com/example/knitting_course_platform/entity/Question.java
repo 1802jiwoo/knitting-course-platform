@@ -36,7 +36,7 @@ public class Question {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
 
-    @Column(name = "image_url")
+    @Column(name = "image_url", length = 500)
     private String imageUrl;
 
     @Column(name = "created_at")

@@ -20,7 +20,7 @@ class QuestionModel extends Question {
     lectureId: lectureId,
     title: json['title'] as String,
     content: '',
-    imageUrl: null,
+    imageUrl: json['imageUrl'] as String?,
     createdAt: DateTime.parse(json['createdAt'] as String),
   );
 
