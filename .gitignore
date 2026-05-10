@@ -1,0 +1,36 @@
+# Flutter build
+project2/front/build/
+project2/project1/front/build/
+
+# Dart tool cache
+**/.dart_tool/
+
+# Android build
+**/.gradle/
+**/local.properties
+**/*.iml
+
+# IDE
+.idea/
+**/.idea/
+*.iml
+
+# Dart/Flutter
+**/.flutter-plugins
+**/.flutter-plugins-dependencies
+**/pubspec.lock
+
+# Spring Boot build
+project2/backend/build/
+project2/backend/out/
+project2/backend/uploads/
+*.class
+*.jar
+!gradle-wrapper.jar
+
+# Zip / archive files
+*.zip
+
+# OS
+.DS_Store
+Thumbs.db

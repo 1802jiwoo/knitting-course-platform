@@ -1,0 +1,35 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(flutter pub *)",
+      "Bash(flutter analyze *)",
+      "Bash(xargs cat)",
+      "Bash(Get-ChildItem -Recurse -Directory)",
+      "Bash(Select-Object -ExpandProperty FullName)",
+      "Bash(Get-ChildItem -Path \"C:\\\\Users\\\\USER\\\\StudioProjects\\\\kitting-course-platform\\\\project1\\\\frontend\" -Recurse -Directory)",
+      "Bash(Sort-Object)",
+      "Bash(git mv *)",
+      "Bash(handle64 \"C:\\\\Users\\\\USER\\\\StudioProjects\\\\kitting-course-platform\\\\project1\")",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git remote *)",
+      "Bash(git rm *)",
+      "Bash(git push *)",
+      "Bash(echo \"exit:$?\")",
+      "Bash(git filter-repo *)",
+      "Bash(pip --version)",
+      "Bash(pip3 --version)",
+      "PowerShell(pip *)",
+      "PowerShell(python --version)",
+      "Bash(git checkout *)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\USER\\\\StudioProjects\\\\kitting-course-platform\" -Recurse -File | Where-Object {$_.Length -gt 5MB} | Select-Object FullName, @{N=\"MB\";E={[math]::Round\\($_.Length/1MB,1\\)}} | Sort-Object MB -Descending)",
+      "PowerShell(Get-ChildItem -Path \"C:\\\\Users\\\\USER\\\\StudioProjects\\\\kitting-course-platform\" -Recurse -File | Where-Object {$_.Length -gt 1MB} | Select-Object FullName, @{N=\"MB\";E={[math]::Round\\($_.Length/1MB,1\\)}} | Sort-Object MB -Descending)",
+      "Bash(git count-objects *)",
+      "Bash(git gc *)",
+      "Bash(git branch *)",
+      "Bash(git reflog *)",
+      "Bash(git ls-tree *)",
+      "Bash(sort -k4 -rn)"
+    ]
+  }
+}
