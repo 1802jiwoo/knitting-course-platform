@@ -5,6 +5,7 @@ import com.example.knitting_course_platform.dto.InstructorApplicationResponse;
 import com.example.knitting_course_platform.entity.InstructorApplication;
 import com.example.knitting_course_platform.entity.User;
 import com.example.knitting_course_platform.exception.DuplicateApplicationException;
+import com.example.knitting_course_platform.exception.ResourceNotFoundException;
 import com.example.knitting_course_platform.repository.InstructorApplicationRepository;
 import com.example.knitting_course_platform.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,7 +24,7 @@ public class InstructorApplicationService {
     @Transactional
     public InstructorApplicationResponse apply(Long userId, InstructorApplicationRequest req) {
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다"));
+                .orElseThrow(() -> new ResourceNotFoundException("사용자를 찾을 수 없습니다"));
 
         if ("INSTRUCTOR".equals(user.getRole())) {
             throw new DuplicateApplicationException("이미 강사 역할을 보유하고 있습니다");

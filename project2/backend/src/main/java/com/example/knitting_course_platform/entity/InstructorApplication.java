@@ -45,4 +45,12 @@ public class InstructorApplication {
         app.teachingPlan = teachingPlan;
         return app;
     }
+
+    public void approve() {
+        this.status = "APPROVED";
+    }
+
+    public void reject() {
+        this.status = "REJECTED";
+    }
 }

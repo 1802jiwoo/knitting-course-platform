@@ -64,6 +64,10 @@ public class User {
         this.password = encodedPassword;
     }
 
+    public void promoteToInstructor() {
+        this.role = "INSTRUCTOR";
+    }
+
     public void delete() {
         this.isDeleted = true;
     }

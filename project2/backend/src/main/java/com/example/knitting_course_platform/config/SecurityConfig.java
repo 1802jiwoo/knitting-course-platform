@@ -32,6 +32,8 @@ public class SecurityConfig {
             .cors(cors -> cors.configurationSource(corsConfigurationSource()))
             .sessionManagement(s -> s.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
+                // 관리자 전용
+                .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // 인증 필요 — 기존
                 .requestMatchers("/api/auth/logout", "/api/profile/**", "/api/instructor-applications/**", "/api/enrollments/**").authenticated()
                 // 인증 필요 — 강의 관리 (강사)

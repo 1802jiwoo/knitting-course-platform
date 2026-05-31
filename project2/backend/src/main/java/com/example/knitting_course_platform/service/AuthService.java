@@ -111,7 +111,7 @@ public class AuthService {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalStateException("다시 로그인해 주세요"));
 
-        refreshTokenRepository.delete(stored);
+        refreshTokenRepository.deleteByTokenId(stored.getTokenId());
 
         String newAccessToken = jwtUtil.generateAccessToken(userId, user.getRole());
         String newRefreshToken = jwtUtil.generateRefreshToken(userId);

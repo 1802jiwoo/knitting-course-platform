@@ -2,6 +2,7 @@ package com.example.knitting_course_platform.service;
 
 import com.example.knitting_course_platform.dto.*;
 import com.example.knitting_course_platform.entity.*;
+import com.example.knitting_course_platform.exception.ResourceNotFoundException;
 import com.example.knitting_course_platform.repository.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,9 @@ public class LectureService {
     // GET /api/lectures/{lectureId} — APPROVED만 공개
     public LectureDetailResponse getLectureDetail(Long lectureId) {
         Lecture lecture = lectureRepository.findById(lectureId)
-                .orElseThrow(() -> new IllegalArgumentException("강의를 찾을 수 없습니다"));
+                .orElseThrow(() -> new com.example.knitting_course_platform.exception.ResourceNotFoundException("강의를 찾을 수 없습니다"));
         if (!"APPROVED".equals(lecture.getStatus())) {
-            throw new IllegalArgumentException("강의를 찾을 수 없습니다");
+            throw new ResourceNotFoundException("강의를 찾을 수 없습니다");
         }
         return LectureDetailResponse.from(lecture);
     }
