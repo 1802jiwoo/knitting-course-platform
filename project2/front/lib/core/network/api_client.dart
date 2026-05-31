@@ -10,7 +10,7 @@ class ApiClient {
   // static const String baseUrl = 'http://172.28.6.110:8080/api';
   // static const String baseUrl = 'http://10.181.32.21:8080/api';
   // static const String baseUrl = 'http://192.168.0.193:8080/api';
-  static const String baseUrl = 'http://192.168.200.161:8080/api';
+  static const String baseUrl = 'http://43.203.212.14:8080/api';
   // static const String baseUrl = 'http://10.36.230.21:8080/api';
 
   final http.Client _client;
