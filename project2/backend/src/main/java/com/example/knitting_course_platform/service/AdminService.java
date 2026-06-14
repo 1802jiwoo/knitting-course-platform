@@ -21,6 +21,7 @@ public class AdminService {
     private final InstructorApplicationRepository applicationRepository;
     private final UserRepository userRepository;
     private final DiscordWebhookService discordWebhookService;
+    private final EmailService emailService;
 
     @Transactional(readOnly = true)
     public List<AdminApplicationResponse> getPendingApplications() {
@@ -47,6 +48,7 @@ public class AdminService {
         user.promoteToInstructor();
         log.info("강사 승인 applicationId={} userId={}", applicationId, application.getUserId());
         discordWebhookService.sendApproved(applicationId, user.getUserId(), user.getNickname());
+        emailService.sendApproved(user.getEmail(), user.getNickname());
     }
 
     @Transactional
@@ -61,5 +63,6 @@ public class AdminService {
         application.reject();
         log.info("강사 거절 applicationId={} userId={}", applicationId, application.getUserId());
         discordWebhookService.sendRejected(applicationId, user.getUserId(), user.getNickname());
+        emailService.sendRejected(user.getEmail(), user.getNickname());
     }
 }
