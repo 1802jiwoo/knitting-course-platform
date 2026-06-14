@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:loop_learn/features/lecture/presentation/widgets/shared_widgets.dart';
 import '../../../../features/lecture/domain/entities/lecture.dart';
@@ -48,13 +49,13 @@ class LectureCard extends StatelessWidget {
                 child: Stack(
                   fit: StackFit.expand,
                   children: [
-                    Image.network(
-                      _imageUrl,
+                    CachedNetworkImage(
+                      imageUrl: _imageUrl,
                       fit: BoxFit.cover,
-                      errorBuilder: (_, __, ___) => Container(
+                      placeholder: (_, __) => Container(color: Colors.grey.shade100),
+                      errorWidget: (context, url, error) => Container(
                         color: Colors.grey.shade200,
-                        child: const Icon(Icons.image_not_supported,
-                            color: Colors.grey),
+                        child: const Icon(Icons.image_not_supported, color: Colors.grey),
                       ),
                     ),
                     Positioned(

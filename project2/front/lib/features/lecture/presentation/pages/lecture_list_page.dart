@@ -152,33 +152,35 @@ class _LectureListPageState extends State<LectureListPage> {
                 ]),
               ),
             )
-          else if (_filtered.isEmpty)
-              const SliverFillRemaining(child: _EmptyState())
-            else
-              SliverPadding(
-                padding: EdgeInsets.fromLTRB(context.isTablet ? 32 : 15, 0, context.isTablet ? 32 : 15, 32),
-                sliver: SliverGrid(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: context.isTablet ? 4 : 1,
-                    mainAxisSpacing: 24,
-                    crossAxisSpacing: 24,
-                    childAspectRatio: 0.95,
+          else
+              Builder(builder: (context) {
+                final filtered = _filtered;
+                if (filtered.isEmpty) return const SliverFillRemaining(child: _EmptyState());
+                return SliverPadding(
+                  padding: EdgeInsets.fromLTRB(context.isTablet ? 32 : 15, 0, context.isTablet ? 32 : 15, 32),
+                  sliver: SliverGrid(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: context.isTablet ? 4 : 1,
+                      mainAxisSpacing: 24,
+                      crossAxisSpacing: 24,
+                      childAspectRatio: 0.95,
+                    ),
+                    delegate: SliverChildBuilderDelegate(
+                      (_, i) {
+                        final l = filtered[i];
+                        return LectureCard(
+                          lecture: l,
+                          isEnrolled: appState.isEnrolled(l.lectureId),
+                          onTap: () => Navigator.pushNamed(
+                            context, AppRouter.lectureDetail, arguments: l.lectureId,
+                          ),
+                        );
+                      },
+                      childCount: filtered.length,
+                    ),
                   ),
-                  delegate: SliverChildBuilderDelegate(
-                        (_, i) {
-                      final l = _filtered[i];
-                      return LectureCard(
-                        lecture: l,
-                        isEnrolled: appState.isEnrolled(l.lectureId),
-                        onTap: () => Navigator.pushNamed(
-                          context, AppRouter.lectureDetail, arguments: l.lectureId,
-                        ),
-                      );
-                    },
-                    childCount: _filtered.length,
-                  ),
-                ),
-              ),
+                );
+              }),
         ],
       ),
     );
