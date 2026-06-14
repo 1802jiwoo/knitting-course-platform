@@ -35,6 +35,9 @@ public class Lecture {
     @Column(name = "thumbnail_url")
     private String thumbnailUrl;
 
+    @Column(nullable = false)
+    private int price = 0;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;

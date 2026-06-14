@@ -42,7 +42,7 @@ public class SecurityConfig {
                 // 관리자 전용
                 .requestMatchers("/api/admin/**").hasRole("ADMIN")
                 // 인증 필요 — 기존
-                .requestMatchers("/api/auth/logout", "/api/profile/**", "/api/instructor-applications/**", "/api/enrollments/**").authenticated()
+                .requestMatchers("/api/auth/logout", "/api/profile/**", "/api/instructor-applications/**", "/api/enrollments/**", "/api/payments/**").authenticated()
                 // 인증 필요 — 강의 관리 (강사)
                 .requestMatchers(HttpMethod.GET, "/api/lectures/my").authenticated()
                 .requestMatchers(HttpMethod.POST, "/api/lectures").authenticated()

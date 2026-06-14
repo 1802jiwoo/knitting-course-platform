@@ -2,11 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:loop_learn/core/extensions/context_extension.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../../core/network/api_client.dart';
 import '../../../../../core/router/app_router.dart';
 import '../../../../../core/state/app_state.dart';
 import '../../../../../core/theme/app_colors.dart';
-import '../../../../../core/widgets/confirm_dialog.dart';
 import '../../../../../features/auth/presentation/providers/auth_state.dart';
+import '../../../../../features/payment/presentation/payment_dialog.dart';
 import '../../../domain/entities/lecture.dart';
 import '../../../domain/entities/lecture_part.dart';
 
@@ -29,14 +30,19 @@ class _LectureDetailRightState extends State<LectureDetailRight> {
       Navigator.pushNamed(context, AppRouter.login);
       return;
     }
-    ConfirmDialog.show(
-      context: context,
-      title: '수강 신청',
-      message: '${widget.lecture.title} 강의를 수강 신청하시겠습니까?',
-      confirmText: '확인',
-      onConfirm: () => appState.enroll(widget.lectureId),
-      variant: ConfirmDialogVariant.defaultVariant,
-    );
+    final price = (widget.lecture as dynamic).price as int? ?? 0;
+    if (price > 0) {
+      PaymentDialog.show(
+        context: context,
+        lectureId: widget.lectureId,
+        lectureTitle: widget.lecture.title,
+        price: price,
+        apiClient: context.read<ApiClient>(),
+        onSuccess: () => appState.enroll(widget.lectureId),
+      );
+    } else {
+      appState.enroll(widget.lectureId);
+    }
   }
 
   @override
