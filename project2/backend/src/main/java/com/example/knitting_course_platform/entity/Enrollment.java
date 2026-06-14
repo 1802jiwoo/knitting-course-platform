@@ -6,7 +6,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "ENROLLMENT")
+@Table(name = "ENROLLMENT", indexes = {
+    @Index(name = "idx_enrollment_user_lecture", columnList = "user_id, lecture_id", unique = true),
+    @Index(name = "idx_enrollment_user_created", columnList = "user_id, created_at")
+})
 @Getter
 @NoArgsConstructor
 public class Enrollment {

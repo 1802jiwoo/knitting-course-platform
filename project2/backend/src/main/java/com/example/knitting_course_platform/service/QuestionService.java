@@ -77,12 +77,21 @@ public class QuestionService {
      * 저장 경로 예: uploads/questions/550e8400-uuid.jpg
      * 반환 URL 예: {server.base-url}/uploads/questions/550e8400-uuid.jpg
      */
+    private static final java.util.Set<String> ALLOWED_MIME_TYPES =
+            java.util.Set.of("image/jpeg", "image/png", "image/gif");
+
     private String saveImageFile(MultipartFile image) {
+        String contentType = image.getContentType();
+        if (contentType == null || !ALLOWED_MIME_TYPES.contains(contentType)) {
+            throw new IllegalArgumentException("jpg, png, gif 파일만 첨부할 수 있습니다");
+        }
+
         try {
-            String original = image.getOriginalFilename();
-            String ext = (original != null && original.contains("."))
-                    ? original.substring(original.lastIndexOf('.'))
-                    : ".jpg";
+            String ext = switch (contentType) {
+                case "image/png" -> ".png";
+                case "image/gif" -> ".gif";
+                default -> ".jpg";
+            };
             String fileName = UUID.randomUUID() + ext;
 
             Path dir = Paths.get(uploadDir, "questions");

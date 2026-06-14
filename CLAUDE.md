@@ -14,8 +14,8 @@
 ## Docs
 | 목적 | 경로 | 포함된 세부 규칙 |
 |------|------|----------------|
-| 버그 기록 | /docs/p2/bugfix_log.md | Bug Fix 작성 형식·규칙 |
-| 프로젝트 상태 | /docs/p2/plans/project_status.md | Backend 작업 프로세스, 상태 기호 기준, 멀티 작업 규칙, 우선순위 기준 |
+| 버그 기록 | /docs/p3/bugfix_log.md | Bug Fix 작성 형식·규칙 |
+| 프로젝트 상태 | /docs/p3/plans/project_status.md | P3 작업 목록, 우선순위, 소요 시간 기준 |
 | 세션 임시 저장 | /docs/p2/session_checkpoint.md | Session Checkpoint 저장·삭제·복구 흐름 |
 
 ---

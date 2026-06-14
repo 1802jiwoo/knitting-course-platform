@@ -15,12 +15,14 @@ import com.example.knitting_course_platform.repository.RefreshTokenRepository;
 import com.example.knitting_course_platform.repository.UserRepository;
 import com.example.knitting_course_platform.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.regex.Pattern;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class AuthService {
@@ -59,6 +61,7 @@ public class AuthService {
                 req.getNickname()
         );
         userRepository.save(user);
+        log.info("회원가입 완료 userId={} email={}", user.getUserId(), user.getEmail());
 
         return new SignUpResult(user.getUserId(), user.getEmail(), user.getNickname(), user.getRole());
     }
@@ -69,14 +72,17 @@ public class AuthService {
                 .orElseThrow(() -> new IllegalStateException("이메일 또는 비밀번호가 올바르지 않습니다"));
 
         if (!passwordEncoder.matches(req.getPassword(), user.getPassword())) {
+            log.warn("로그인 실패 (비밀번호 불일치) email={}", req.getEmail());
             throw new IllegalStateException("이메일 또는 비밀번호가 올바르지 않습니다");
         }
 
         if (user.isDeleted()) {
+            log.warn("로그인 실패 (탈퇴 계정) email={}", req.getEmail());
             throw new IllegalStateException("이메일 또는 비밀번호가 올바르지 않습니다");
         }
 
         if (user.isSuspended()) {
+            log.warn("로그인 실패 (정지 계정) userId={}", user.getUserId());
             throw new AccountSuspendedException("정지된 계정입니다. 관리자에게 문의하세요");
         }
 
@@ -89,6 +95,7 @@ public class AuthService {
                 RefreshToken.create(user.getUserId(), refreshToken, jwtUtil.getRefreshTokenExpiry())
         );
 
+        log.info("로그인 성공 userId={} role={}", user.getUserId(), user.getRole());
         return new LoginResponse(user.getUserId(), user.getNickname(), user.getRole(), accessToken, refreshToken);
     }
 

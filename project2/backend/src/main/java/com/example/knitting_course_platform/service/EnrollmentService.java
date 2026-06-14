@@ -5,10 +5,12 @@ import com.example.knitting_course_platform.entity.*;
 import com.example.knitting_course_platform.exception.*;
 import com.example.knitting_course_platform.repository.*;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EnrollmentService {
@@ -33,6 +35,7 @@ public class EnrollmentService {
             .orElseThrow(() -> new IllegalStateException("사용자를 찾을 수 없습니다"));
         Enrollment enrollment = Enrollment.create(user, lecture);
         enrollmentRepository.save(enrollment);
+        log.info("수강 신청 userId={} lectureId={} enrollmentId={}", userId, req.lectureId(), enrollment.getEnrollmentId());
         return new EnrollmentCreateResponse(enrollment.getEnrollmentId(), lecture.getLectureId(), enrollment.getCreatedAt());
     }
 
@@ -44,6 +47,7 @@ public class EnrollmentService {
             throw new ForbiddenException("접근 권한이 없습니다");
         }
         enrollmentRepository.delete(enrollment);
+        log.info("수강 취소 userId={} enrollmentId={}", userId, enrollmentId);
     }
 
     @Transactional(readOnly = true)

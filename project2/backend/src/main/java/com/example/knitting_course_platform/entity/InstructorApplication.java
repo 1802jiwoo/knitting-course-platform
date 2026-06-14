@@ -7,7 +7,10 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "instructor_application")
+@Table(name = "instructor_application", indexes = {
+    @Index(name = "idx_app_user_status", columnList = "user_id, status"),
+    @Index(name = "idx_app_status_created", columnList = "status, created_at")
+})
 @Getter
 @NoArgsConstructor
 public class InstructorApplication {
