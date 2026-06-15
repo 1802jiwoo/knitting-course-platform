@@ -46,6 +46,7 @@ public class ProfileService {
         }
 
         user.updateProfile(newNickname, request.getBio());
+        userRepository.save(user);
 
         return new ProfileResponse(user);
     }
