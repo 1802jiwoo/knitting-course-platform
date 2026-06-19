@@ -25,4 +25,7 @@ public interface LectureRepository extends JpaRepository<Lecture, Long> {
 
     // 강사 본인 강의 전체
     List<Lecture> findByUserUserIdOrderByCreatedAtDesc(Long userId);
+
+    // 관리자: 검토 대기(PENDING) 강의 목록
+    List<Lecture> findAllByStatusOrderByCreatedAtAsc(String status);
 }

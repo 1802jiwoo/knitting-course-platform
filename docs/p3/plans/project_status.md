@@ -35,6 +35,13 @@
 - [✓] lectureType 허용값 검증 (STITCH_BASICS/PROJECT_CLASS/PATTERN 외 거부)
 - [✓] SQL 인젝션 검토 – native query 없음 확인, JPA parameterized query 사용 중 → 안전
 
+### [✓] 관리자 강의 승인 기능 (Admin Lecture Approval)
+- [✓] `Lecture.approve()`/`reject()` 추가 (PENDING → APPROVED/REJECTED)
+- [✓] `GET /api/admin/lectures` — 검토 대기(PENDING) 강의 목록 (ADMIN 권한)
+- [✓] `POST /api/admin/lectures/{lectureId}/approve` / `reject`
+- [✓] 프론트 `AdminPage`에 "강의 승인" 탭 추가 (강사 신청 관리 탭과 동일 UX)
+- [✓] EC2(`43.203.212.14`) 백엔드 jar 재배포 + 프론트 웹 빌드 배포 완료
+
 ---
 
 ## 진행 중인 작업
@@ -71,7 +78,7 @@
 ### 🔗 외부 연동 (External Integration) — 잔여
 | 항목 | 예상 소요 | 비고 |
 |------|----------|------|
-| [ ] 이메일 알림 – 강사 승인/거절 시 SMTP 발송 | 1시간 | Spring Mail + Gmail SMTP |
+| [⁓] 이메일 알림 – 강사 승인/거절 시 SMTP 발송 | 1시간 | 코드(EmailService, Naver SMTP)만 작성되어 있고 실제 발송 테스트 안 됨 — 정상 작동 미확인 상태. 발표/시연에서 제외 |
 | [ ] 스케쥴러 – 매주 수강 통계 집계 | 1.5시간 | @Scheduled |
 
 ---
@@ -88,5 +95,5 @@
 ### 💳 결제 모듈 (Payment) — 난이도 높음
 | 항목 | 예상 소요 | 비고 |
 |------|----------|------|
-| [ ] Toss Payments 결제 연동 | 1일+ | 결제 승인 API, Webhook, 환불 로직 |
+| [⁓] Toss Payments 결제 연동 | 1일+ | 백엔드 API(`/api/payments/confirm`)는 동작하나, 정상적으로 동작 안 함으로 처리 — 발표/시연에서 제외 |
 | [ ] 결제 내역 조회 (프론트 + 백엔드) | 3시간 | |

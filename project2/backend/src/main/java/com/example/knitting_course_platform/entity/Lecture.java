@@ -88,6 +88,14 @@ public class Lecture {
         this.status = "DRAFT";
     }
 
+    public void approve() {
+        this.status = "APPROVED";
+    }
+
+    public void reject() {
+        this.status = "REJECTED";
+    }
+
     public boolean isOwnedBy(Long userId) {
         return this.user.getUserId().equals(userId);
     }
