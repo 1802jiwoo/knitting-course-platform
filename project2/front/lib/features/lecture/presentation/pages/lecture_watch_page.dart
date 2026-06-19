@@ -38,6 +38,7 @@ class _LectureWatchPageState extends State<LectureWatchPage>
   final YoutubePlayerController youtubePlayerController =
       YoutubePlayerController(
         params: const YoutubePlayerParams(
+          mute: true,
           showControls: true,
           showFullscreenButton: true,
           origin: 'https://www.youtube-nocookie.com',

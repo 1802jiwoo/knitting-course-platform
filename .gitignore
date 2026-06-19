@@ -34,3 +34,6 @@ project2/backend/uploads/
 # OS
 .DS_Store
 Thumbs.db
+
+# Local-only secrets / test accounts (절대 커밋 금지)
+**/test_accounts_LOCAL_ONLY.md

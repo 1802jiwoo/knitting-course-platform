@@ -180,7 +180,7 @@ class ApiClient {
       final uri = _buildUri('/auth/refresh', null);
       final response = await _client.post(
         uri,
-        headers: {'Content-Type': 'application/json'},
+        headers: {'Content-Type': 'application/json; charset=utf-8'},
         body: jsonEncode({'refreshToken': refreshToken}),
       );
 
@@ -215,7 +215,7 @@ class ApiClient {
   }
 
   Map<String, String> _headers() => {
-        'Content-Type': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
         ..._authHeader(),
       };
 
