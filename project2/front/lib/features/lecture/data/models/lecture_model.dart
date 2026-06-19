@@ -10,6 +10,7 @@ class LectureModel extends Lecture {
     required super.createdAt,
     required super.tagNames,
     super.thumbnailUrl,
+    super.price,
   });
 
   factory LectureModel.fromJson(Map<String, dynamic> json) => LectureModel(
@@ -25,6 +26,7 @@ class LectureModel extends Lecture {
         (json['tags'] as List<dynamic>?)?.map((e) => e as String).toList() ??
         [],
     thumbnailUrl: json['thumbnailUrl'] as String?,
+    price: (json['price'] as num?)?.toInt() ?? 0,
   );
 
   Map<String, dynamic> toJson() => {
@@ -35,5 +37,6 @@ class LectureModel extends Lecture {
     'instructor': instructorName,
     'tags': tagNames,
     'thumbnailUrl': thumbnailUrl,
+    'price': price,
   };
 }

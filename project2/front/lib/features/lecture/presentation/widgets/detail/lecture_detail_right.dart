@@ -30,7 +30,7 @@ class _LectureDetailRightState extends State<LectureDetailRight> {
       Navigator.pushNamed(context, AppRouter.login);
       return;
     }
-    final price = (widget.lecture as dynamic).price as int? ?? 0;
+    final price = widget.lecture.price;
     if (price > 0) {
       PaymentDialog.show(
         context: context,

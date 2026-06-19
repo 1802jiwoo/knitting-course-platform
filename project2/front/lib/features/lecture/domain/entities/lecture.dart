@@ -7,6 +7,7 @@ class Lecture {
   final DateTime createdAt;
   final List<String> tagNames;
   final String? thumbnailUrl;
+  final int price;
 
   const Lecture({
     required this.lectureId,
@@ -17,5 +18,6 @@ class Lecture {
     required this.createdAt,
     required this.tagNames,
     this.thumbnailUrl,
+    this.price = 0,
   });
 }

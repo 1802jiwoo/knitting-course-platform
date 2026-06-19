@@ -11,6 +11,7 @@ public record LectureDetailResponse(
     String instructor,
     String lectureType,
     String thumbnailUrl,
+    int price,
     List<String> tags
 ) {
     public static LectureDetailResponse from(Lecture lecture) {
@@ -25,6 +26,7 @@ public record LectureDetailResponse(
             lecture.getUser().getNickname(),
             lecture.getLectureType(),
             lecture.getThumbnailUrl(),
+            lecture.getPrice(),
             tagNames
         );
     }
